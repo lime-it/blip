@@ -16,7 +16,12 @@ Project facilitator for people with little time and little desire to work
 $ npm install -g @lime.it/blip
 $ blip COMMAND
 running command...
-
+$ blip (-v|--version|version)
+@lime.it/blip/0.1.5 win32-x64 node-v10.16.0
+$ blip --help [COMMAND]
+USAGE
+  $ blip COMMAND
+...
 ```
 <!-- usagestop -->
 # Commands
@@ -34,7 +39,7 @@ running command...
 
 ## `blip config:machine`
 
-Get the docker-machine name for the current project.
+describe the command here
 
 ```
 USAGE
@@ -45,11 +50,11 @@ OPTIONS
   --id=id     index of the desired machine
 ```
 
-_See code: [src/commands/config/machine.ts](https://github.com/lime-it/blip/blob/master/src/commands/config/machine.ts)_
+_See code: [src\commands\config\machine.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\config\machine.ts)_
 
 ## `blip destroy`
 
-Destroys the environment of the project, removing the docker-machines and hosts file entries.
+describe the command here
 
 ```
 USAGE
@@ -59,11 +64,11 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/destroy.ts](https://github.com/lime-it/blip/blob/master/src/commands/destroy.ts)_
+_See code: [src\commands\destroy.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\destroy.ts)_
 
 ## `blip down`
 
-Stops the project docker-machines
+describe the command here
 
 ```
 USAGE
@@ -73,7 +78,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/down.ts](https://github.com/lime-it/blip/blob/master/src/commands/down.ts)_
+_See code: [src\commands\down.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\down.ts)_
 
 ## `blip help [COMMAND]`
 
@@ -90,11 +95,11 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
 
 ## `blip new [PROJECTNAME]`
 
-Creates a new project, in a folder with the given name
+describe the command here
 
 ```
 USAGE
@@ -107,11 +112,11 @@ OPTIONS
   --mirror=mirror            Use docker registry mirror
 ```
 
-_See code: [src/commands/new.ts](https://github.com/lime-it/blip/blob/master/src/commands/new.ts)_
+_See code: [src\commands\new.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\new.ts)_
 
 ## `blip registry:down`
 
-Stop the local docker hub registry mirror
+describe the command here
 
 ```
 USAGE
@@ -121,11 +126,11 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/registry/down.ts](https://github.com/lime-it/blip/blob/master/src/commands/registry/down.ts)_
+_See code: [src\commands\registry\down.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\down.ts)_
 
 ## `blip registry:init`
 
-Initialize the local docker hub registry mirror
+describe the command here
 
 ```
 USAGE
@@ -135,11 +140,11 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/registry/init.ts](https://github.com/lime-it/blip/blob/master/src/commands/registry/init.ts)_
+_See code: [src\commands\registry\init.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\init.ts)_
 
 ## `blip registry:remove`
 
-Remove the local docker hub registry mirror
+describe the command here
 
 ```
 USAGE
@@ -149,11 +154,11 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/registry/remove.ts](https://github.com/lime-it/blip/blob/master/src/commands/registry/remove.ts)_
+_See code: [src\commands\registry\remove.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\remove.ts)_
 
 ## `blip registry:up`
 
-Start the local docker hub registry mirror
+describe the command here
 
 ```
 USAGE
@@ -163,11 +168,11 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/registry/up.ts](https://github.com/lime-it/blip/blob/master/src/commands/registry/up.ts)_
+_See code: [src\commands\registry\up.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\up.ts)_
 
 ## `blip up`
 
-Start the project docker-machines and sets the hosts entries.
+describe the command here
 
 ```
 USAGE
@@ -177,5 +182,5 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/up.ts](https://github.com/lime-it/blip/blob/master/src/commands/up.ts)_
+_See code: [src\commands\up.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\up.ts)_
 <!-- commandsstop -->

@@ -64,7 +64,7 @@ export default class New extends Command {
     projectModel.machines[params.machineName]={
       mirror:mirror?[mirror]:null,
       domains:[`localhost.dev.${params.projectName}`],
-      sharedFolders:[{name:'./',hostPath:'./',guestPath:'/home/docker'}]
+      sharedFolders:[{name:'./',hostPath:'./',guestPath:'/home/docker/project'}]
     };
 
     if(existsSync(`${envrionmentCwd()}/${params.projectName}`))

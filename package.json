@@ -1,7 +1,7 @@
 {
   "name": "@lime.it/blip",
   "description": "Project facilitator for people with little time and little desire to work",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "author": "gcanossa @gcanossa",
   "bin": {
     "blip": "./bin/run"
@@ -11,6 +11,7 @@
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
     "@oclif/plugin-help": "^2.2.3",
+    "cli-ux": "^5.4.4",
     "execa": "^4.0.0",
     "inquirer": "^7.0.4",
     "listr": "^0.14.3",
@@ -69,9 +70,9 @@
   },
   "repository": "lime-it/blip",
   "scripts": {
-    "postpack": "rimraf oclif.manifest.json && rimraf assets",
+    "postpack": "rimraf oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme && cp -r src/assets assets",
+    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },

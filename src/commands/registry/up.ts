@@ -32,7 +32,7 @@ export default class RegistryUp extends Command {
           const ps = await d.ps('image');
 
           if(!ps.find(p=>p.image=='registry:2'))
-            await execa('docker-compose',['-f', `${environment.basePath}/assets/registry-compose.yml`,'up', '-d','--force-recreate'],{env:ctx.machineEnvironment});
+            await execa('docker-compose',['-f', `${environment.basePath}/../assets/registry-compose.yml`,'up', '-d','--force-recreate'],{env:ctx.machineEnvironment});
         }
       }
     ]);
