@@ -158,13 +158,13 @@ OPTIONS
 
 _See code: [src\commands\registry\up.ts](https://github.com/lime-it/lime-it/blob/v1.0.0/src\commands\registry\up.ts)_
 
-## `blip remove [FILE]`
+## `blip destroy [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ blip remove [FILE]
+  $ blip destroy [FILE]
 
 OPTIONS
   -f, --force
@@ -172,7 +172,7 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src\commands\remove.ts](https://github.com/lime-it/lime-it/blob/v1.0.0/src\commands\remove.ts)_
+_See code: [src\commands\destroy.ts](https://github.com/lime-it/lime-it/blob/v1.0.0/src\commands\destroy.ts)_
 
 ## `blip up`
 
