@@ -1,12 +1,12 @@
 {
-  "name": "blip",
+  "name": "@lime.it/blip",
   "description": "Project facilitator for people with little time and little desire to work",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "author": "gcanossa @gcanossa",
   "bin": {
     "blip": "./bin/run"
   },
-  "bugs": "https://github.com/lime-it/lime-it/issues",
+  "bugs": "https://github.com/lime-it/blip/issues",
   "dependencies": {
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
@@ -50,14 +50,15 @@
   "files": [
     "/bin",
     "/lib",
+    "/assets",
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/lime-it/lime-it",
+  "homepage": "https://github.com/lime-it/blip",
   "keywords": [
     "oclif"
   ],
-  "license": "AGPL",
+  "license": "AGPL-3.0",
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
@@ -66,11 +67,11 @@
       "@oclif/plugin-help"
     ]
   },
-  "repository": "lime-it/lime-it",
+  "repository": "lime-it/blip",
   "scripts": {
-    "postpack": "rimraf oclif.manifest.json",
+    "postpack": "rimraf oclif.manifest.json && rimraf assets",
     "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme && cp -r src/assets assets",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },

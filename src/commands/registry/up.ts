@@ -4,6 +4,7 @@ import { machineEnsureCreated, machineEnsureActive, machineLocalDnsSetup } from 
 import { environment } from '../../environment'
 import execa = require('execa')
 import { Docker } from '../../common/docker'
+import { VirtualboxDriver } from '../../drivers/virtualbox.driver'
 
 export default class RegistryUp extends Command {
   static description = 'describe the command here'
@@ -17,8 +18,10 @@ export default class RegistryUp extends Command {
   async run() {
     const {args, flags} = this.parse(RegistryUp)
 
+    const driver = new VirtualboxDriver();
+    
     const tasks = new Listr([
-      machineEnsureCreated(environment.registry.machineName),
+      machineEnsureCreated(environment.registry.machineName,{driver:'virtualbox'}, driver.getMachineCreateArgs({})),
       machineEnsureActive(environment.registry.machineName),
       machineLocalDnsSetup(environment.registry.machineName, environment.registry.domainName),
       {

@@ -1,7 +1,7 @@
 import { mkdirSync, readdirSync } from 'fs';
 import { environment } from '../environment';
 import selfsigned = require('selfsigned');
-import { envrionmentCwd, envrionmentDataPath, writeFilePromise } from './utils';
+import { envrionmentDataPath, writeFilePromise } from './utils';
 
 export class Openssl{
     static async createDomainCertificate(domain:string, global:boolean){
