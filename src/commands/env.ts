@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command'
-import { readGlobalBlipModel, saveGlobalBlipModel, readProjectModel } from '../common/utils';
+import { readGlobalBlipModel, saveGlobalBlipModel, readProjectModel, handleLink } from '../common/utils';
 import { DockerMachine } from '../common/docker-machine';
 
 export default class Env extends Command {
@@ -10,13 +10,17 @@ export default class Env extends Command {
     shell: flags.string({default:'bash'})
   }
 
-  static args = [];
+  static args = [
+    {name:"linkName", require: false}
+  ]
 
   async run() {
     const {args, flags} = this.parse(Env)
-    
-    const projectModel = await readProjectModel();
 
-    console.log(DockerMachine.envStdout(Object.keys(projectModel.machines)[0], flags.shell));
+    return handleLink(args.linkName, async ()=>{
+      const projectModel = await readProjectModel();
+  
+      console.log(await DockerMachine.envStdout(Object.keys(projectModel.machines)[0], flags.shell));
+    })
   }
 }
