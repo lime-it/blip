@@ -17,7 +17,7 @@ $ npm install -g @lime.it/blip
 $ blip COMMAND
 running command...
 $ blip (-v|--version|version)
-@lime.it/blip/0.1.5 win32-x64 node-v10.16.0
+@lime.it/blip/0.2.1 win32-x64 node-v10.16.0
 $ blip --help [COMMAND]
 USAGE
   $ blip COMMAND
@@ -28,14 +28,18 @@ USAGE
 <!-- commands -->
 * [`blip config:machine`](#blip-configmachine)
 * [`blip destroy`](#blip-destroy)
-* [`blip down`](#blip-down)
+* [`blip down [LINKNAME]`](#blip-down-linkname)
+* [`blip env`](#blip-env)
 * [`blip help [COMMAND]`](#blip-help-command)
+* [`blip link [LINKNAME]`](#blip-link-linkname)
+* [`blip ls`](#blip-ls)
 * [`blip new [PROJECTNAME]`](#blip-new-projectname)
 * [`blip registry:down`](#blip-registrydown)
 * [`blip registry:init`](#blip-registryinit)
 * [`blip registry:remove`](#blip-registryremove)
 * [`blip registry:up`](#blip-registryup)
-* [`blip up`](#blip-up)
+* [`blip unlink [LINKNAME]`](#blip-unlink-linkname)
+* [`blip up [LINKNAME]`](#blip-up-linkname)
 
 ## `blip config:machine`
 
@@ -50,7 +54,7 @@ OPTIONS
   --id=id     index of the desired machine
 ```
 
-_See code: [src\commands\config\machine.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\config\machine.ts)_
+_See code: [src\commands\config\machine.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\config\machine.ts)_
 
 ## `blip destroy`
 
@@ -64,21 +68,36 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\destroy.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\destroy.ts)_
+_See code: [src\commands\destroy.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\destroy.ts)_
 
-## `blip down`
+## `blip down [LINKNAME]`
 
 describe the command here
 
 ```
 USAGE
-  $ blip down
+  $ blip down [LINKNAME]
 
 OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\down.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\down.ts)_
+_See code: [src\commands\down.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\down.ts)_
+
+## `blip env`
+
+describe the command here
+
+```
+USAGE
+  $ blip env
+
+OPTIONS
+  -h, --help     show CLI help
+  --shell=shell  [default: bash]
+```
+
+_See code: [src\commands\env.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\env.ts)_
 
 ## `blip help [COMMAND]`
 
@@ -97,6 +116,34 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
 
+## `blip link [LINKNAME]`
+
+describe the command here
+
+```
+USAGE
+  $ blip link [LINKNAME]
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src\commands\link.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\link.ts)_
+
+## `blip ls`
+
+describe the command here
+
+```
+USAGE
+  $ blip ls
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src\commands\ls.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\ls.ts)_
+
 ## `blip new [PROJECTNAME]`
 
 describe the command here
@@ -112,7 +159,7 @@ OPTIONS
   --mirror=mirror            Use docker registry mirror
 ```
 
-_See code: [src\commands\new.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\new.ts)_
+_See code: [src\commands\new.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\new.ts)_
 
 ## `blip registry:down`
 
@@ -126,7 +173,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\down.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\down.ts)_
+_See code: [src\commands\registry\down.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\registry\down.ts)_
 
 ## `blip registry:init`
 
@@ -140,7 +187,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\init.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\init.ts)_
+_See code: [src\commands\registry\init.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\registry\init.ts)_
 
 ## `blip registry:remove`
 
@@ -154,7 +201,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\remove.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\remove.ts)_
+_See code: [src\commands\registry\remove.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\registry\remove.ts)_
 
 ## `blip registry:up`
 
@@ -168,19 +215,33 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\up.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\registry\up.ts)_
+_See code: [src\commands\registry\up.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\registry\up.ts)_
 
-## `blip up`
+## `blip unlink [LINKNAME]`
 
 describe the command here
 
 ```
 USAGE
-  $ blip up
+  $ blip unlink [LINKNAME]
 
 OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\up.ts](https://github.com/lime-it/blip/blob/v0.1.5/src\commands\up.ts)_
+_See code: [src\commands\unlink.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\unlink.ts)_
+
+## `blip up [LINKNAME]`
+
+describe the command here
+
+```
+USAGE
+  $ blip up [LINKNAME]
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src\commands\up.ts](https://github.com/lime-it/blip/blob/v0.2.1/src\commands\up.ts)_
 <!-- commandsstop -->

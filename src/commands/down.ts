@@ -10,7 +10,9 @@ export default class Down extends Command {
     help: flags.help({char: 'h'})
   }
 
-  static args = []
+  static args = [
+    {name:"linkName", require: false}
+  ]
 
   async run() {
     const {args, flags} = this.parse(Down)
