@@ -1,7 +1,7 @@
 import Listr = require('listr');
 import { DockerMachine, DockerMachineListResult, DockerMachineEnv, DockerMachineCreateOptions, getMachineAddress } from './docker-machine';
 import { EtcHosts } from './etc-hosts';
-import { envrionmentCwd, ProjectModel, readProjectModel } from './utils';
+import { environmentCwd, ProjectModel, readProjectModel } from './utils';
 import { VirtualboxDriver } from '../drivers/virtualbox.driver';
 import { Openssl } from './openssl';
 import * as path from 'path';
@@ -113,7 +113,7 @@ export function environmentApplyConfiguraiton():Listr.ListrTask[]{
                     const confShares = machine.sharedFolders.map(p=>({
                         ...p, 
                         name:p.guestPath, 
-                        hostPath:path.isAbsolute(p.hostPath)?p.hostPath:path.resolve(envrionmentCwd(),p.hostPath)
+                        hostPath:path.isAbsolute(p.hostPath)?p.hostPath:path.resolve(environmentCwd(),p.hostPath)
                     }));
                     const toBeRemovedShares = shares.filter(p=>!confShares.find(t=>t.name==p.name && t.hostPath==p.hostPath && t.guestPath==p.guestPath));
                     const toBeAddedShares = confShares.filter(p=>!shares.find(t=>t.name==p.name && t.hostPath==p.hostPath && t.guestPath==p.guestPath));

@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import { environmentApplyConfiguraiton, environmentBringUp } from '../common/tasks'
 import Listr = require('listr')
+import { readGlobalBlipModel, handleLink } from '../common/utils'
 
 export default class Up extends Command {
   static description = 'describe the command here'
@@ -9,16 +10,20 @@ export default class Up extends Command {
     help: flags.help({char: 'h'})
   }
 
-  static args = []
+  static args = [
+    {name:"linkName", require: false}
+  ]
 
   async run() {
     const {args, flags} = this.parse(Up)
 
-    const tasks = new Listr([
-      ...environmentApplyConfiguraiton(),
-      ...environmentBringUp()
-    ]);
-
-    await tasks.run();
+    return handleLink(args.linkName, async ()=>{
+      const tasks = new Listr([
+        ...environmentApplyConfiguraiton(),
+        ...environmentBringUp()
+      ]);
+  
+      await tasks.run();
+    })
   }
 }

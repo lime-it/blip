@@ -83,11 +83,11 @@ export class DockerMachine{
     await execa('docker-machine', ['create', name, ...commandOptions ]);
   }
   
-  static async env(name:string){
+  static async env(name:string, shell:string = 'bash'){
     if(!name || name.trim().length==0)
       throw new Error(`'name' must be set`);
 
-      const {stdout} = await execa('docker-machine', ['env', name, '--shell', 'bash']);
+      const {stdout} = await execa('docker-machine', ['env', name, '--shell', shell]);
     
       const regex=/^export\s+([^=]+)=\"([^\"]+)\"$/;
       const vars = stdout.split('\n').filter(p=>!p.startsWith('#')).reduce((acc,line)=>{
@@ -97,6 +97,15 @@ export class DockerMachine{
       },{} as any);
 
       return vars as DockerMachineEnv;
+  }
+
+  static async envStdout(name:string, shell:string = 'bash'){
+    if(!name || name.trim().length==0)
+      throw new Error(`'name' must be set`);
+
+      const {stdout} = await execa('docker-machine', ['env', name, '--shell', shell]);
+    
+      return stdout;
   }
 
   static async start(name:string){

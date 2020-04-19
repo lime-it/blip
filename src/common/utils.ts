@@ -1,6 +1,7 @@
 import { MachineSharedFolder } from '../drivers/driver';
-import { readFile, writeFile } from 'fs';
+import { readFile, writeFile, existsSync } from 'fs';
 import * as YAML from 'yaml'
+import { environment } from '../environment';
 
 export function readFilePromise(path:string):Promise<string>{
     return new Promise<string>((resolve, reject)=>{
@@ -23,15 +24,15 @@ export function writeFilePromise(path:string, data:string):Promise<void>{
     })
 }
 
-export function envrionmentCwd(){
+export function environmentCwd(){
     return process.cwd();
 }
 
 export function envrionmentConfigPath(){
-    return `${envrionmentCwd()}/blip.yml`;
+    return `${environmentCwd()}/blip.yml`;
 }
 export function envrionmentDataPath(){
-    return `${envrionmentCwd()}/.blip`;
+    return `${environmentCwd()}/.blip`;
 }
 
 export async function readProjectModel():Promise<ProjectModel>{
@@ -49,4 +50,42 @@ export interface ProjectMachineModel{
 export interface ProjectModel{
     version:string;
     machines:{[key:string]:ProjectMachineModel}
+}
+
+export function environmentGlobalConfigPath(){
+    return `${environment.basePath}/config.yml`;
+}
+
+export async function readGlobalBlipModel():Promise<GlobalBlipModel>{
+    if(!existsSync(environmentGlobalConfigPath()))
+        await saveGlobalBlipModel({links:{}});
+    return YAML.parse(await readFilePromise(environmentGlobalConfigPath())) as GlobalBlipModel;
+}
+export async function saveGlobalBlipModel(model:GlobalBlipModel):Promise<void>{
+    await writeFilePromise(environmentGlobalConfigPath(), YAML.stringify(model));
+}
+
+export interface GlobalBlipModel {
+    links: {[key: string]: LinkModel};
+}
+
+export interface LinkModel{
+    gitRemoteFetchUrl?: string; 
+    path: string;
+}
+
+export async function handleLink(linkName:string, fn:()=>Promise<any>):Promise<any>{
+    
+    let cwd = process.cwd();
+    if(linkName){
+      const config = await readGlobalBlipModel();
+  
+      if(config.links[linkName])
+        process.chdir(config.links[linkName].path);
+    }
+
+    return fn().then(p=>{
+        process.chdir(cwd);
+        return p;
+    });
 }

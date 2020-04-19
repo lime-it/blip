@@ -6,7 +6,7 @@ import Listr = require('listr')
 import { environment } from '../environment'
 import * as YAML from 'yaml'
 import { existsSync, mkdirSync } from 'fs'
-import { envrionmentCwd, ProjectModel, ProjectMachineModel, envrionmentDataPath, saveProjectModel } from '../common/utils'
+import { environmentCwd, ProjectModel, ProjectMachineModel, envrionmentDataPath, saveProjectModel } from '../common/utils'
 import { environmentApplyConfiguraiton } from '../common/tasks'
 
 export default class New extends Command {
@@ -67,12 +67,12 @@ export default class New extends Command {
       sharedFolders:[{name:'./',hostPath:'./',guestPath:'/home/docker/project'}]
     };
 
-    if(existsSync(`${envrionmentCwd()}/${params.projectName}`))
+    if(existsSync(`${environmentCwd()}/${params.projectName}`))
       throw new Error(`Folder '${params.projectName}' already exists`);
 
-    mkdirSync(`${envrionmentCwd()}/${params.projectName}`,{recursive:true});
+    mkdirSync(`${environmentCwd()}/${params.projectName}`,{recursive:true});
 
-    process.chdir(`${envrionmentCwd()}/${params.projectName}`);
+    process.chdir(`${environmentCwd()}/${params.projectName}`);
 
     mkdirSync(envrionmentDataPath(),{recursive:true});
     await saveProjectModel(projectModel);
