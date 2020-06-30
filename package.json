@@ -1,7 +1,7 @@
 {
   "name": "@lime.it/blip",
   "description": "Project facilitator for people with little time and little desire to work",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": "gcanossa @gcanossa",
   "bin": {
     "blip": "./bin/run"
@@ -61,7 +61,7 @@
   "keywords": [
     "oclif"
   ],
-  "license": "AGPL-3.0",
+  "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",

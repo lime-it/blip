@@ -17,7 +17,7 @@ $ npm install -g @lime.it/blip
 $ blip COMMAND
 running command...
 $ blip (-v|--version|version)
-@lime.it/blip/0.2.2 win32-x64 node-v10.16.0
+@lime.it/blip/0.2.3 win32-x64 node-v10.16.0
 $ blip --help [COMMAND]
 USAGE
   $ blip COMMAND
@@ -54,7 +54,7 @@ OPTIONS
   --id=id     index of the desired machine
 ```
 
-_See code: [src\commands\config\machine.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\config\machine.ts)_
+_See code: [src\commands\config\machine.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\config\machine.ts)_
 
 ## `blip destroy`
 
@@ -68,7 +68,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\destroy.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\destroy.ts)_
+_See code: [src\commands\destroy.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\destroy.ts)_
 
 ## `blip down [LINKNAME]`
 
@@ -82,7 +82,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\down.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\down.ts)_
+_See code: [src\commands\down.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\down.ts)_
 
 ## `blip env [LINKNAME]`
 
@@ -97,7 +97,7 @@ OPTIONS
   --shell=shell  [default: bash]
 ```
 
-_See code: [src\commands\env.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\env.ts)_
+_See code: [src\commands\env.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\env.ts)_
 
 ## `blip help [COMMAND]`
 
@@ -128,7 +128,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\link.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\link.ts)_
+_See code: [src\commands\link.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\link.ts)_
 
 ## `blip ls`
 
@@ -142,7 +142,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\ls.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\ls.ts)_
+_See code: [src\commands\ls.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\ls.ts)_
 
 ## `blip new [PROJECTNAME]`
 
@@ -159,7 +159,7 @@ OPTIONS
   --mirror=mirror            Use docker registry mirror
 ```
 
-_See code: [src\commands\new.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\new.ts)_
+_See code: [src\commands\new.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\new.ts)_
 
 ## `blip registry:down`
 
@@ -173,7 +173,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\down.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\registry\down.ts)_
+_See code: [src\commands\registry\down.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\down.ts)_
 
 ## `blip registry:init`
 
@@ -187,7 +187,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\init.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\registry\init.ts)_
+_See code: [src\commands\registry\init.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\init.ts)_
 
 ## `blip registry:remove`
 
@@ -201,7 +201,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\remove.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\registry\remove.ts)_
+_See code: [src\commands\registry\remove.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\remove.ts)_
 
 ## `blip registry:up`
 
@@ -215,7 +215,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\registry\up.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\registry\up.ts)_
+_See code: [src\commands\registry\up.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\up.ts)_
 
 ## `blip unlink [LINKNAME]`
 
@@ -229,7 +229,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\unlink.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\unlink.ts)_
+_See code: [src\commands\unlink.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\unlink.ts)_
 
 ## `blip up [LINKNAME]`
 
@@ -243,5 +243,5 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\up.ts](https://github.com/lime-it/blip/blob/v0.2.2/src\commands\up.ts)_
+_See code: [src\commands\up.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\up.ts)_
 <!-- commandsstop -->
