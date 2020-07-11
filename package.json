@@ -8,44 +8,44 @@
   },
   "bugs": "https://github.com/lime-it/blip/issues",
   "dependencies": {
-    "@oclif/command": "^1.5.19",
-    "@oclif/config": "^1.15.1",
-    "@oclif/plugin-help": "^2.2.3",
-    "cli-ux": "^5.4.5",
-    "execa": "^4.0.0",
-    "inquirer": "^7.1.0",
+    "@oclif/command": "^1.7.0",
+    "@oclif/config": "^1.16.0",
+    "@oclif/plugin-help": "^3.1.0",
+    "@oclif/plugin-plugins": "^1.9.0",
+    "cli-ux": "^5.4.9",
+    "execa": "^4.0.3",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.3.1",
     "listr": "^0.14.3",
     "selfsigned": "^1.10.7",
-    "simple-git": "^1.132.0",
-    "tslib": "^1.11.1",
-    "uninstall": "0.0.0",
-    "uuid": "^3.4.0",
-    "yaml": "^1.8.3"
+    "simple-git": "^2.12.0",
+    "tslib": "^1.13.0",
+    "uuid": "^8.2.0",
+    "yaml": "^1.10.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
-    "@oclif/test": "^1.2.5",
+    "@oclif/test": "^1.2.6",
     "@types/chai": "^4.2.11",
     "@types/execa": "^2.0.0",
+    "@types/fs-extra": "^9.0.1",
     "@types/inquirer": "^6.5.0",
     "@types/listr": "^0.14.2",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^10.17.19",
-    "@types/uuid": "^3.4.8",
-    "@types/yaml": "^1.2.0",
+    "@types/node": "^10.17.27",
+    "@types/uuid": "^8.0.0",
+    "@types/yaml": "^1.9.7",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.1.0",
     "globby": "^10.0.2",
-    "install": "^0.13.0",
     "mocha": "^5.2.0",
-    "npm": "^6.14.4",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.2",
     "simple-git-types": "^1.53.10",
-    "ts-node": "^8.8.2",
-    "typescript": "^3.8.3"
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -67,7 +67,8 @@
     "commands": "./lib/commands",
     "bin": "blip",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins"
     ]
   },
   "repository": "lime-it/blip",

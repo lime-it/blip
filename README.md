@@ -1,10 +1,13 @@
-blip
-====
+@lime.it/blip
+=============
 
 Project facilitator for people with little time and little desire to work
 
-[![Version](https://img.shields.io/npm/v/@lime.it/blip)](https://www.npmjs.com/package/@lime.it/blip)
-[![License](https://img.shields.io/npm/l/@lime.it/blip)](https://github.com/lime-it/blip/blob/master/LICENSE)
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/@lime.it/blip.svg)](https://npmjs.org/package/@lime.it/blip)
+[![CircleCI](https://circleci.com/gh/lime-it/blip/tree/master.svg?style=shield)](https://circleci.com/gh/lime-it/blip/tree/master)
+[![Downloads/week](https://img.shields.io/npm/dw/@lime.it/blip.svg)](https://npmjs.org/package/@lime.it/blip)
+[![License](https://img.shields.io/npm/l/@lime.it/blip.svg)](https://github.com/lime-it/blip/blob/master/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -26,78 +29,28 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`blip config:machine [LINKNAME]`](#blip-configmachine-linkname)
-* [`blip destroy`](#blip-destroy)
-* [`blip down [LINKNAME]`](#blip-down-linkname)
-* [`blip env [LINKNAME]`](#blip-env-linkname)
+* [`blip hello [FILE]`](#blip-hello-file)
 * [`blip help [COMMAND]`](#blip-help-command)
-* [`blip link [LINKNAME]`](#blip-link-linkname)
-* [`blip ls`](#blip-ls)
-* [`blip new [PROJECTNAME]`](#blip-new-projectname)
-* [`blip registry:down`](#blip-registrydown)
-* [`blip registry:init`](#blip-registryinit)
-* [`blip registry:remove`](#blip-registryremove)
-* [`blip registry:up`](#blip-registryup)
-* [`blip unlink [LINKNAME]`](#blip-unlink-linkname)
-* [`blip up [LINKNAME]`](#blip-up-linkname)
 
-## `blip config:machine [LINKNAME]`
+## `blip hello [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ blip config:machine [LINKNAME]
+  $ blip hello [FILE]
 
 OPTIONS
-  -h, --help  show CLI help
-  --id=id     index of the desired machine
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+
+EXAMPLE
+  $ blip hello
+  hello world from ./src/hello.ts!
 ```
 
-_See code: [src\commands\config\machine.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\config\machine.ts)_
-
-## `blip destroy`
-
-describe the command here
-
-```
-USAGE
-  $ blip destroy
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\destroy.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\destroy.ts)_
-
-## `blip down [LINKNAME]`
-
-describe the command here
-
-```
-USAGE
-  $ blip down [LINKNAME]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\down.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\down.ts)_
-
-## `blip env [LINKNAME]`
-
-describe the command here
-
-```
-USAGE
-  $ blip env [LINKNAME]
-
-OPTIONS
-  -h, --help     show CLI help
-  --shell=shell  [default: bash]
-```
-
-_See code: [src\commands\env.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\env.ts)_
+_See code: [src\commands\hello.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\hello.ts)_
 
 ## `blip help [COMMAND]`
 
@@ -114,134 +67,5 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
-
-## `blip link [LINKNAME]`
-
-describe the command here
-
-```
-USAGE
-  $ blip link [LINKNAME]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\link.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\link.ts)_
-
-## `blip ls`
-
-describe the command here
-
-```
-USAGE
-  $ blip ls
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\ls.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\ls.ts)_
-
-## `blip new [PROJECTNAME]`
-
-describe the command here
-
-```
-USAGE
-  $ blip new [PROJECTNAME]
-
-OPTIONS
-  -h, --help                 show CLI help
-  --localmirror              Use local docker registry mirror
-  --machinename=machinename  Docker machine name for the project
-  --mirror=mirror            Use docker registry mirror
-```
-
-_See code: [src\commands\new.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\new.ts)_
-
-## `blip registry:down`
-
-describe the command here
-
-```
-USAGE
-  $ blip registry:down
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\registry\down.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\down.ts)_
-
-## `blip registry:init`
-
-describe the command here
-
-```
-USAGE
-  $ blip registry:init
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\registry\init.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\init.ts)_
-
-## `blip registry:remove`
-
-describe the command here
-
-```
-USAGE
-  $ blip registry:remove
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\registry\remove.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\remove.ts)_
-
-## `blip registry:up`
-
-describe the command here
-
-```
-USAGE
-  $ blip registry:up
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\registry\up.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\registry\up.ts)_
-
-## `blip unlink [LINKNAME]`
-
-describe the command here
-
-```
-USAGE
-  $ blip unlink [LINKNAME]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\unlink.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\unlink.ts)_
-
-## `blip up [LINKNAME]`
-
-describe the command here
-
-```
-USAGE
-  $ blip up [LINKNAME]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src\commands\up.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\up.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src\commands\help.ts)_
 <!-- commandsstop -->

@@ -1,25 +1,25 @@
 import {Command, flags} from '@oclif/command'
-import { readGlobalBlipModel, environmentCwd, saveGlobalBlipModel } from '../common/utils';
+import {readGlobalBlipModel, saveGlobalBlipModel} from '../common/utils'
 
 export default class Unlink extends Command {
   static description = 'describe the command here'
 
   static flags = {
-    help: flags.help({char: 'h'})
+    help: flags.help({char: 'h'}),
   }
 
   static args = [
-    {name:'linkName'}
+    {name: 'linkName'},
   ];
 
   async run() {
-    const {args, flags} = this.parse(Unlink)
-    
-    const config = await readGlobalBlipModel();
+    const {args} = this.parse(Unlink)
 
-    if(config.links[args.linkName])
-      delete config.links[args.linkName];
+    const config = await readGlobalBlipModel()
 
-    await saveGlobalBlipModel(config);
+    if (config.links[args.linkName])
+      delete config.links[args.linkName]
+
+    await saveGlobalBlipModel(config)
   }
 }
