@@ -1,0 +1,29 @@
+{
+  "name": "@lime.it/blip-core",
+  "version": "1.0.0",
+  "description": "Blip cli basic abstractions and functionalities",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "./node_modules/.bin/tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lime-it/blip.git"
+  },
+  "keywords": [
+    "blip",
+    "devops"
+  ],
+  "author": "gcanossa @gcanossa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lime-it/blip/issues"
+  },
+  "homepage": "https://github.com/lime-it/blip#readme",
+  "devDependencies": {
+    "typescript": "^3.9.6"
+  }
+}
