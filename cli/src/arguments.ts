@@ -1,5 +1,7 @@
-export const projectLinkName = {
+import {args} from '@oclif/parser'
+
+export const projectLinkName: args.IArg<string> = {
   name: 'linkName',
-  require: false,
-  deseciption: 'Globally linked project name on which to execute the command.'
+  description: 'Globally linked project name on which to execute the command.',
+  required: false,
 }

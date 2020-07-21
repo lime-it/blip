@@ -1,22 +1,22 @@
-import {Command, flags} from '@oclif/command'
-import {readGlobalBlipModel, saveGlobalBlipModel} from '../common/utils'
+// import {Command, flags} from '@oclif/command'
+// import {readGlobalBlipModel, saveGlobalBlipModel} from '../common/utils'
 
-export default class Ls extends Command {
-  static description = 'describe the command here'
+// export default class Ls extends Command {
+//   static description = 'describe the command here'
 
-  static flags = {
-    help: flags.help({char: 'h'}),
-  }
+//   static flags = {
+//     help: flags.help({char: 'h'}),
+//   }
 
-  static args = [];
+//   static args = [];
 
-  async run() {
-    const {args, flags} = this.parse(Ls)
+//   async run() {
+//     const {args, flags} = this.parse(Ls)
 
-    const config = await readGlobalBlipModel()
+//     const config = await readGlobalBlipModel()
 
-    for (const key of Object.keys(config.links)) {
-      console.log(`${key}\t${config.links[key].path}\t${config.links[key].gitRemoteFetchUrl}`)
-    }
-  }
-}
+//     for (const key of Object.keys(config.links)) {
+//       console.log(`${key}\t${config.links[key].path}\t${config.links[key].gitRemoteFetchUrl}`)
+//     }
+//   }
+// }

@@ -1,4 +1,6 @@
 import * as execa from 'execa'
+import { ToolingDependecy } from './model';
+import { CLIError } from '@oclif/errors';
 
 export type DockerMachineListField='name'|'active'|'driver'|'state'|'url'|'swarm'|'docker'|'errors';
 
@@ -30,7 +32,7 @@ export function getMachineAddress(env: DockerMachineEnv): string {
 }
 
 export interface DockerMachineCreateOptions{
-  driver: 'virtualbox';
+  driver: string;
   engineRegistryMirror: string[]|null;
   engineInsecureRegistry: string[]|null;
 }
@@ -41,8 +43,27 @@ const defaultOptions: DockerMachineCreateOptions = {
   engineInsecureRegistry: null,
 }
 
-export class DockerMachine {
-  static async ls(...fields: (keyof DockerMachineListResult)[]) {
+export interface DockerMachineTool extends ToolingDependecy {
+  ls(...fields: (keyof DockerMachineListResult)[]):Promise<DockerMachineListResult[]>;
+  create(name: string, options: Partial<DockerMachineCreateOptions>, direverOptions: {[key: string]: string}):Promise<void>;
+  env(name: string, shell: string):Promise<DockerMachineEnv>;
+  envStdout(name: string, shell: string):Promise<string>;
+  start(name: string):Promise<void>;
+  stop(name: string):Promise<void>;
+  remove(name: string):Promise<void>;
+}
+
+class DockerMachineToolImpl implements DockerMachineTool {
+  async isPresent(): Promise<boolean> {
+    const {exitCode} = await execa('docker-machine', ['-v']);
+    return exitCode == 0;
+  }
+  async ensurePresent(): Promise<void> {
+    if(await this.isPresent() == false)
+      throw new CLIError(`Docker machine is missing from the current environment. Please check https://docs.docker.com/machine/install-machine/`);
+  }
+
+  async ls(...fields: (keyof DockerMachineListResult)[]) {
     fields = fields && fields.length > 0 ? fields : ['name', 'active', 'activeHost', 'activeSwarm', 'driverName', 'state', 'URL', 'swarm', 'error', 'dockerVersion', 'responseTime']
     const format = fields.map(p => `{{.${(p.charAt(0).toUpperCase() + p.substring(1))}}}`).join('|')
 
@@ -56,9 +77,13 @@ export class DockerMachine {
     })
   }
 
-  static async create(name: string, options: Partial<DockerMachineCreateOptions> = defaultOptions, direverOptions: {[key: string]: string} = {}) {
+  async create(name: string, options: Partial<DockerMachineCreateOptions> = defaultOptions, direverOptions: {[key: string]: string} = {}) {
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
+    
+    const machineList = await DockerMachine.ls()
+    if (!!(machineList as DockerMachineListResult[]).find(p => p.name === name)) 
+      return;
 
     const commandOptions: string[] = []
     Object.keys(options).filter(p => Boolean((options as any)[p])).map(p => ({key: p, option: '--' + p.replace(/([A-Z])/g, '-$1').toLowerCase()})).forEach(p => {
@@ -83,7 +108,7 @@ export class DockerMachine {
     await execa('docker-machine', ['create', name, ...commandOptions])
   }
 
-  static async env(name: string, shell = 'bash') {
+  async env(name: string, shell = 'bash') {
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
@@ -99,7 +124,7 @@ export class DockerMachine {
     return vars as DockerMachineEnv
   }
 
-  static async envStdout(name: string, shell = 'bash') {
+  async envStdout(name: string, shell = 'bash') {
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
@@ -108,24 +133,26 @@ export class DockerMachine {
     return stdout
   }
 
-  static async start(name: string) {
+  async start(name: string) {
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
     await execa('docker-machine', ['start', name])
   }
 
-  static async stop(name: string) {
+  async stop(name: string) {
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
     await execa('docker-machine', ['stop', name])
   }
 
-  static async remove(name: string) {
+  async remove(name: string) {
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
     await execa('docker-machine', ['rm', '--force', name])
   }
 }
+
+export const DockerMachine:DockerMachineTool = new DockerMachineToolImpl();

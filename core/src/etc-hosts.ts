@@ -1,4 +1,4 @@
-import {environment} from '../environment'
+import {environment} from './environment'
 import {readFile, writeFile} from 'fs-extra'
 
 const addressRegExStr = '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
@@ -24,8 +24,8 @@ export interface EtcHostsContent{
     mappings: {[key: string]: string};
 }
 
-async function readHosts(): Promise<EtcHostsContent> {
-  const path = (environment.hostsPath as any)[process.platform]
+async function readHostsFile(): Promise<EtcHostsContent> {
+  const path = environment.hostsFilePath
 
   const data = await readFile(path, 'utf-8')
 
@@ -47,8 +47,8 @@ async function readHosts(): Promise<EtcHostsContent> {
   }
 }
 
-async function writeHosts(content: EtcHostsContent): Promise<void> {
-  const path = (environment.hostsPath as any)[process.platform]
+async function writeHostsFile(content: EtcHostsContent): Promise<void> {
+  const path = environment.hostsFilePath
 
   await writeFile(path, content.comments.join('\n') + '\n' + Object.keys(content.mappings).map(p => `\t${content.mappings[p]}\t${p}`).join('\n'))
 }
@@ -61,11 +61,11 @@ export class EtcHosts {
   }
 
   public static async create(): Promise<EtcHosts> {
-    return new EtcHosts(await readHosts())
+    return new EtcHosts(await readHostsFile())
   }
 
   public async flush(): Promise<void> {
-    await writeHosts(this.content)
+    await writeHostsFile(this.content)
   }
 
   public address(domain: string) {
