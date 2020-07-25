@@ -1,29 +1,27 @@
-// import {Command, flags} from '@oclif/command'
-// import {environmentApplyConfiguraiton, environmentBringUp} from '../common/tasks'
-// import Listr = require('listr')
-// import {handleLink} from '../common/utils'
+import {Command, flags} from '@oclif/command'
+import Listr = require('listr')
+import { workspaceEnforceConfig } from '../tasks/workspace-enforce-config.task'
+import { workspaceUp } from '../tasks/workspace-up.task'
+import { BlipConf } from '@lime.it/blip-core'
 
-// export default class Up extends Command {
-//   static description = 'describe the command here'
+export default class Up extends Command {
+  static description = 'Bring up a blip workspace, starting machines and enforcing configuration.'
 
-//   static flags = {
-//     help: flags.help({char: 'h'}),
-//   }
+  static flags = {
+    help: flags.help({char: 'h'}),
+  }
 
-//   static args = [
-//     {name: 'linkName', require: false},
-//   ]
+  static args = [
+  ]
 
-//   async run() {
-//     const {args} = this.parse(Up)
+  async run() {
+    const {args} = this.parse(Up)
 
-//     return handleLink(args.linkName, async () => {
-//       const tasks = new Listr([
-//         ...environmentApplyConfiguraiton(),
-//         ...environmentBringUp(),
-//       ])
+    const tasks = new Listr([
+      ...workspaceEnforceConfig(),
+      ...workspaceUp(),
+    ])
 
-//       await tasks.run()
-//     })
-//   }
-// }
+    await tasks.run({workspace: await BlipConf.readWorkspace()})
+  }
+}

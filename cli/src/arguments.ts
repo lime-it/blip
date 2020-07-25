@@ -1,7 +1,7 @@
 import {args} from '@oclif/parser'
 
-export const projectLinkName: args.IArg<string> = {
-  name: 'linkName',
-  description: 'Globally linked project name on which to execute the command.',
+export const machineNameArg: args.IArg<string> = {
+  name: 'machine',
   required: false,
+  description:'Name of the workspace machine. If not specified the first will be used.'
 }

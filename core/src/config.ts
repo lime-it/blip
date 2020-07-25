@@ -1,11 +1,15 @@
-import {readFile, writeFile, existsSync} from 'fs-extra'
-import {join} from 'path';
+import {readFile, writeFile, existsSync, mkdirp} from 'fs-extra'
+import {join, sep} from 'path';
 import * as YAML from 'yaml'
 import { BlipWorkspace, GlobalBlipConfiguration } from './model';
 import {CLIError} from '@oclif/errors';
 import { environment } from './environment';
 
 const currentWorkingDirectory = process.cwd();
+const currentWorkspaceDirectory = currentWorkingDirectory.split(sep)
+  .reduce((acc, current, index, original)=> acc.length==0 ? original.map(x=>[current]) : acc.map((p, i)=> i>=original.length-index ? p : [...p, current]), [] as string[][])
+  .map(p => join(...p))
+  .find(p => existsSync(join(p, "blip.yml")) && existsSync(join(p, ".blip"))) || currentWorkingDirectory
 
 export interface BlipConfiguration {
   currentWorkingDir: string;
@@ -18,7 +22,7 @@ export interface BlipConfiguration {
   readGlobalConfiguration():Promise<GlobalBlipConfiguration>;
   overwriteGlobalConfiguration(model:GlobalBlipConfiguration):Promise<void>;
 
-  checkInWorkspace<T>(fn:()=>T):T;
+  throwIfNotInWorkspace():void;
 }
 
 class BlipConfigurationImpl implements BlipConfiguration{
@@ -26,10 +30,10 @@ class BlipConfigurationImpl implements BlipConfiguration{
     return currentWorkingDirectory;
   }
   get workspaceConfigFile():string{
-    return join(currentWorkingDirectory, "blip.yml");
+    return join(currentWorkspaceDirectory, "blip.yml");
   }
   get workspaceConfigPath():string{
-    return join(currentWorkingDirectory, ".blip");
+    return join(currentWorkspaceDirectory, ".blip");
   }
   get globalConfigFilePath():string{
     return join(environment.configDir, "config.yml");
@@ -40,16 +44,18 @@ class BlipConfigurationImpl implements BlipConfiguration{
   }
 
   async readWorkspace():Promise<BlipWorkspace>{
-    return await this.checkInWorkspace(async ()=>YAML.parse(await readFile(this.workspaceConfigFile, 'utf8')) as BlipWorkspace);
+    this.throwIfNotInWorkspace();
+    return YAML.parse(await readFile(this.workspaceConfigFile, 'utf8')) as BlipWorkspace;
   }
 
   async overwriteWorkspace(model:BlipWorkspace):Promise<void>{
-    return await this.checkInWorkspace(async ()=> await writeFile(this.workspaceConfigFile, YAML.stringify(model)));
+    this.throwIfNotInWorkspace();
+    return await writeFile(this.workspaceConfigFile, YAML.stringify(model));
   }
 
   async readGlobalConfiguration():Promise<GlobalBlipConfiguration>{
     if (!existsSync(this.globalConfigFilePath)){
-      const conf = {links: {}};
+      const conf = {defaultDriver:null, workspaces:{}};
       await this.overwriteGlobalConfiguration(conf);
       return conf;
     }
@@ -58,14 +64,17 @@ class BlipConfigurationImpl implements BlipConfiguration{
   }
 
   async overwriteGlobalConfiguration(model:GlobalBlipConfiguration):Promise<void>{
+    this.ensureGlobalConfigPathExists();
     await writeFile(this.globalConfigFilePath, YAML.stringify(model))
   }
   
-  checkInWorkspace<T>(fn:()=>T):T {
+  throwIfNotInWorkspace():void {
     if (!this.isWorkspace)
       throw new CLIError('Not in a blip workspace.');
-    else
-      return fn();
+  }
+
+  private async ensureGlobalConfigPathExists(){
+    await mkdirp(environment.configDir);
   }
 }
 

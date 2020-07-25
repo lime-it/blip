@@ -1,39 +1,25 @@
-// import {Command, flags} from '@oclif/command'
-// import {readProjectModel, handleLink} from '../common/utils'
-// import {DockerMachine} from '../common/docker-machine'
-// import Listr = require('listr')
+import {Command, flags} from '@oclif/command'
+import Listr = require('listr')
+import { workspaceDown } from '../tasks/workspace-down.task'
+import { BlipConf } from '@lime.it/blip-core'
 
-// export default class Down extends Command {
-//   static description = 'describe the command here'
+export default class Down extends Command {
+  static description = 'Bring down a blip workspace, stopping its machines.'
 
-//   static flags = {
-//     help: flags.help({char: 'h'}),
-//   }
+  static flags = {
+    help: flags.help({char: 'h'}),
+  }
 
-//   static args = [
-//     {name: 'linkName', require: false},
-//   ]
+  static args = [
+  ]
 
-//   async run() {
-//     const {args, flags} = this.parse(Down)
+  async run() {
+    const {args, flags} = this.parse(Down)
 
-//     return handleLink(args.linkName, async () => {
-//       const projectModel = await readProjectModel()
-//       const machines = await DockerMachine.ls('name', 'state')
+    const tasks = new Listr([
+      ...workspaceDown(),
+    ])
 
-//       const tasks: Listr.ListrTask[] = []
-//       for (const name of Object.keys(projectModel.machines)) {
-//         if (machines.find(p => p.name == name && p.state?.toLowerCase() == 'running'))
-//           tasks.push({
-//             title: `Stopping machine '${name}'`,
-//             task: async (ctx, task) => {
-//               await DockerMachine.stop(name)
-//             },
-//           })
-//       }
-
-//       if (tasks.length > 0)
-//         await (new Listr(tasks)).run()
-//     })
-//   }
-// }
+    await tasks.run({workspace: await BlipConf.readWorkspace()})
+  }
+}

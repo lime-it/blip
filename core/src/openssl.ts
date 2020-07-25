@@ -6,8 +6,13 @@ import { BlipConf } from './config';
 
 export class Openssl {
   static async createDomainCertificate(domain: string, global: boolean) {
-    const certsPath = global ? join(environment.configDir, "certs")
-      : BlipConf.checkInWorkspace(()=>join(BlipConf.workspaceConfigPath, "certs"));
+    let certsPath: string;
+    if(global)
+      certsPath = join(environment.configDir, "certs");
+    else{
+      BlipConf.throwIfNotInWorkspace();
+      certsPath = join(BlipConf.workspaceConfigPath, "certs");
+    }
 
     mkdirSync(certsPath, {recursive: true})
 
@@ -23,8 +28,13 @@ export class Openssl {
   }
 
   static async domainCertificateExists(domain: string, global: boolean) {
-    const certsPath = global ? join(environment.configDir, "certs")
-      : BlipConf.checkInWorkspace(()=>join(BlipConf.workspaceConfigPath, "certs"));
+    let certsPath: string;
+    if(global)
+      certsPath = join(environment.configDir, "certs");
+    else{
+      BlipConf.throwIfNotInWorkspace();
+      certsPath = join(BlipConf.workspaceConfigPath, "certs");
+    }
 
     if(!existsSync(certsPath))
       return false;

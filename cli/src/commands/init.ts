@@ -1,85 +1,92 @@
-// import {Command, flags} from '@oclif/command'
-// import * as inquirer from 'inquirer'
-// import * as uuid_v4 from 'uuid/v4'
-// import {DockerMachine} from '../common/docker-machine'
-// import Listr = require('listr')
-// import {environment} from '../environment'
-// import * as YAML from 'yaml'
-// import {existsSync, mkdirSync} from 'fs'
-// import {environmentCwd, ProjectModel, ProjectMachineModel, envrionmentDataPath, saveProjectModel} from '../common/utils'
-// import {environmentApplyConfiguraiton} from '../common/tasks'
+import {Command, flags} from '@oclif/command'
+import simpleGit from 'simple-git';
+import { BlipConf } from '@lime.it/blip-core';
 
-// export default class New extends Command {
-//   static description = 'describe the command here'
+export default class Init extends Command {
+  static description = 'Initialize a blip workspace in the current directory.'
 
-//   static flags = {
-//     machinename: flags.string({description: 'Docker machine name for the project'}),
-//     mirror: flags.string({description: 'Use docker registry mirror'}),
-//     localmirror: flags.boolean({description: 'Use local docker registry mirror'}),
-//     help: flags.help({char: 'h'}),
-//   }
+  static flags = {
+    help: flags.help({char: 'h'}),
+    "machine-name": flags.string({description: 'Docker machine name for the project', multiple: true, required:false}),
+    "skip-git": flags.boolean({description: 'When true, does not initialize a git repository.', default: false}),
+    "skip-setup": flags.boolean({description: 'When true, does not creates workspace machines.'})
+  }
 
-//   static args = [{name: 'projectName'}]
+  static args = []
 
-//   async run() {
-//     const {args, flags} = this.parse(New)
+  async run() {
+    const {args, flags} = this.parse(Init)
 
-//     const machineList = await DockerMachine.ls()
+    const git = simpleGit();
 
-//     const params = await inquirer.prompt([
-//       {
-//         when: response => !args.projectName,
-//         name: 'projectName',
-//         message: 'Type the project name',
-//         type: 'input',
-//         default: args.projectName,
-//       },
-//       {
-//         when: response => Boolean(flags.machinename) && !machineList.find(p => p.name == flags.machinename),
-//         name: 'machineName',
-//         message: `The machine '${flags.machinename}' does not exist. Select another ore create a new one`,
-//         type: 'list',
-//         choices: [{name: 'new'}, ...machineList.map(p => ({name: p}))],
-//         default: 'new',
-//       },
-//     ])
+    const isGitRepo = await git.revparse(["--is-inside-work-tree"]).then(result=>result == 'true', ()=>false);
 
-//     params.projectName = params.projectName || args.projectName
-//     params.machineName = params.machineName || 'new'
+    if(!isGitRepo && !flags["skip-git"])
+      await git.init();
 
-//     let createMachine = false
-//     if (params.machineName == 'new') {
-//       params.machineName = 'blip--' + uuid_v4()
-//       createMachine = true
-//     }
+    console.log(BlipConf.workspaceConfigFile)
 
-//     const mirror = !flags.mirror && !flags.localmirror ? null : flags.localmirror ? `https://${environment.registry.domainName}` : flags.mirror || null
+    //TODO: create workspace file
+    //TODO: add entry to globalregistry file
+    //TODO: create machines
+    //TODO: setup hosts
 
-//     const projectModel: ProjectModel = {
-//       version: '1',
-//       machines: {} as {[key: string]: ProjectMachineModel},
-//     }
+    // const machineList = await DockerMachine.ls()
 
-//     projectModel.machines[params.machineName] = {
-//       mirror: mirror ? [mirror] : null,
-//       domains: [`localhost.dev.${params.projectName}`],
-//       sharedFolders: [{name: './', hostPath: './', guestPath: '/home/docker/project'}],
-//     }
+    // const params = await inquirer.prompt([
+    //   {
+    //     when: response => !args.projectName,
+    //     name: 'projectName',
+    //     message: 'Type the project name',
+    //     type: 'input',
+    //     default: args.projectName,
+    //   },
+    //   {
+    //     when: response => Boolean(flags.machinename) && !machineList.find(p => p.name == flags.machinename),
+    //     name: 'machineName',
+    //     message: `The machine '${flags.machinename}' does not exist. Select another ore create a new one`,
+    //     type: 'list',
+    //     choices: [{name: 'new'}, ...machineList.map(p => ({name: p}))],
+    //     default: 'new',
+    //   },
+    // ])
 
-//     if (existsSync(`${environmentCwd()}/${params.projectName}`))
-//       throw new Error(`Folder '${params.projectName}' already exists`)
+    // params.projectName = params.projectName || args.projectName
+    // params.machineName = params.machineName || 'new'
 
-//     mkdirSync(`${environmentCwd()}/${params.projectName}`, {recursive: true})
+    // let createMachine = false
+    // if (params.machineName == 'new') {
+    //   params.machineName = 'blip--' + uuid_v4()
+    //   createMachine = true
+    // }
 
-//     process.chdir(`${environmentCwd()}/${params.projectName}`)
+    // const mirror = !flags.mirror && !flags.localmirror ? null : flags.localmirror ? `https://${environment.registry.domainName}` : flags.mirror || null
 
-//     mkdirSync(envrionmentDataPath(), {recursive: true})
-//     await saveProjectModel(projectModel)
+    // const projectModel: ProjectModel = {
+    //   version: '1',
+    //   machines: {} as {[key: string]: ProjectMachineModel},
+    // }
 
-//     const tasks = new Listr([
-//       ...environmentApplyConfiguraiton(),
-//     ])
+    // projectModel.machines[params.machineName] = {
+    //   mirror: mirror ? [mirror] : null,
+    //   domains: [`localhost.dev.${params.projectName}`],
+    //   sharedFolders: [{name: './', hostPath: './', guestPath: '/home/docker/project'}],
+    // }
 
-//     await tasks.run()
-//   }
-// }
+    // if (existsSync(`${environmentCwd()}/${params.projectName}`))
+    //   throw new Error(`Folder '${params.projectName}' already exists`)
+
+    // mkdirSync(`${environmentCwd()}/${params.projectName}`, {recursive: true})
+
+    // process.chdir(`${environmentCwd()}/${params.projectName}`)
+
+    // mkdirSync(envrionmentDataPath(), {recursive: true})
+    // await saveProjectModel(projectModel)
+
+    // const tasks = new Listr([
+    //   ...environmentApplyConfiguraiton(),
+    // ])
+
+    // await tasks.run()
+  }
+}

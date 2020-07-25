@@ -1,26 +1,34 @@
-// import {Command, flags} from '@oclif/command'
-// import {readGlobalBlipModel, saveGlobalBlipModel, readProjectModel, handleLink} from '../common/utils'
-// import {DockerMachine} from '../common/docker-machine'
+import {Command, flags} from '@oclif/command'
+import { BlipConf, DockerMachine } from '@lime.it/blip-core'
+import { CLIError } from '@oclif/errors';
+import { machineNameArg } from '../arguments';
 
-// export default class Env extends Command {
-//   static description = 'describe the command here'
+export default class Env extends Command {
+  static description = 'Prints the docker-machine env for the workspace given machine.'
 
-//   static flags = {
-//     help: flags.help({char: 'h'}),
-//     shell: flags.string({default: 'bash'}),
-//   }
+  static flags = {
+    help: flags.help({char: 'h'}),
+    shell: flags.string({default: 'bash', description: 'Command output destination shell type.'}),
+  }
 
-//   static args = [
-//     {name: 'linkName', require: false},
-//   ]
+  static args = [
+    machineNameArg
+  ]
 
-//   async run() {
-//     const {args, flags} = this.parse(Env)
+  async run() {
+    const {args, flags} = this.parse(Env)
 
-//     return handleLink(args.linkName, async () => {
-//       const projectModel = await readProjectModel()
+    const workspace = await BlipConf.readWorkspace();
 
-//       console.log(await DockerMachine.envStdout(Object.keys(projectModel.machines)[0], flags.shell))
-//     })
-//   }
-// }
+    if(Object.keys(workspace.machines).length == 0)
+      throw new CLIError("The workspace do not have any machine");
+
+    if(!args.machine)
+      args.machine = Object.keys(workspace.machines)[0];
+
+    if(!workspace.machines[args.machine])
+      throw new CLIError(`Unknown machine '${args.machine}'`);
+
+    process.stdout.write(await DockerMachine.envStdout(args.machine, flags.shell));
+  }
+}
