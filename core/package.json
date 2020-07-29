@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/lime-it/blip#readme",
   "devDependencies": {
+    "@oclif/parser": "^3.8.5",
     "@types/execa": "^2.0.0",
     "@types/fs-extra": "^9.0.1",
     "@types/uuid": "^8.0.0",

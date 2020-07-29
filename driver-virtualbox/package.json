@@ -39,18 +39,18 @@
   ],
   "homepage": "https://github.com/lime-it/blip",
   "keywords": [
-    "oclif-plugin"
+    "oclif-plugin",
+    "blip",
+    "blip-driver",
+    "blip-driver-virtualbox",
+    "virtual-box"
   ],
   "license": "MIT",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "oclif-example",
     "devPlugins": [
       "@oclif/plugin-help"
-    ],
-    "hooks": {
-      "blip/machine:add-shared-folder": "./lib/hooks/machine_add-shared-folder"
-    }
+    ]
   },
   "repository": "lime-it/blip",
   "scripts": {
