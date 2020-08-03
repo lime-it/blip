@@ -68,7 +68,8 @@
     "bin": "blip",
     "plugins": [
       "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
+      "@oclif/plugin-plugins",
+      "@lime.it/blip-driver-virtualbox"
     ]
   },
   "repository": "lime-it/blip",

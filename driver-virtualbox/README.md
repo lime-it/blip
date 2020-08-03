@@ -17,122 +17,17 @@ Blip cli virtualbox driver
 <!-- usage -->
 ```sh-session
 $ npm install -g @lime.it/blip-driver-virtualbox
-$ oclif-example COMMAND
+$ @lime.it/blip-driver-virtualbox COMMAND
 running command...
-$ oclif-example (-v|--version|version)
+$ @lime.it/blip-driver-virtualbox (-v|--version|version)
 @lime.it/blip-driver-virtualbox/0.1.0 win32-x64 node-v10.16.0
-$ oclif-example --help [COMMAND]
+$ @lime.it/blip-driver-virtualbox --help [COMMAND]
 USAGE
-  $ oclif-example COMMAND
+  $ @lime.it/blip-driver-virtualbox COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`oclif-example hello [FILE]`](#oclif-example-hello-file)
-* [`oclif-example virtualbox:add-share [FILE]`](#oclif-example-virtualboxadd-share-file)
-* [`oclif-example virtualbox:get-config [FILE]`](#oclif-example-virtualboxget-config-file)
-* [`oclif-example virtualbox:parse-create-args [FILE]`](#oclif-example-virtualboxparse-create-args-file)
-* [`oclif-example virtualbox:remove-share [FILE]`](#oclif-example-virtualboxremove-share-file)
-* [`oclif-example virtualbox:set-config [FILE]`](#oclif-example-virtualboxset-config-file)
 
-## `oclif-example hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ oclif-example hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ oclif-example hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src\commands\hello.ts](https://github.com/lime-it/blip/blob/v0.1.0/src\commands\hello.ts)_
-
-## `oclif-example virtualbox:add-share [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ oclif-example virtualbox:add-share [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src\commands\virtualbox\add-share.ts](https://github.com/lime-it/blip/blob/v0.1.0/src\commands\virtualbox\add-share.ts)_
-
-## `oclif-example virtualbox:get-config [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ oclif-example virtualbox:get-config [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src\commands\virtualbox\get-config.ts](https://github.com/lime-it/blip/blob/v0.1.0/src\commands\virtualbox\get-config.ts)_
-
-## `oclif-example virtualbox:parse-create-args [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ oclif-example virtualbox:parse-create-args [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src\commands\virtualbox\parse-create-args.ts](https://github.com/lime-it/blip/blob/v0.1.0/src\commands\virtualbox\parse-create-args.ts)_
-
-## `oclif-example virtualbox:remove-share [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ oclif-example virtualbox:remove-share [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src\commands\virtualbox\remove-share.ts](https://github.com/lime-it/blip/blob/v0.1.0/src\commands\virtualbox\remove-share.ts)_
-
-## `oclif-example virtualbox:set-config [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ oclif-example virtualbox:set-config [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src\commands\virtualbox\set-config.ts](https://github.com/lime-it/blip/blob/v0.1.0/src\commands\virtualbox\set-config.ts)_
 <!-- commandsstop -->

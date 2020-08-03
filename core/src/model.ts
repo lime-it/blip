@@ -9,21 +9,21 @@ export interface BlipWorkspace{
 
 export interface BlipWorkspaceMachine{
   domains: string[];
-  sharedFolders: BlipMachineSharedFolder[];
-  driver:string;
-  attached:boolean;
+  configuration: BlipMachineConfiguration;
+  driver: string;
+  attached: boolean;
 }
 
-export interface BlipMachineConfig{
-  cpuCount: number;
-  diskSizeMB: number;
-  ramSizeMB: number;
-}
-
-export interface BlipMachineSharedFolder{
-  name: string;
+export interface BlipMachineShareFolderInfo {
   hostPath: string;
   guestPath: string;
+}
+
+export interface BlipMachineConfiguration {
+  cpuCount: number;
+  ramMB: number;
+  diskMB: number;
+  sharedFolders: { [key:string]: BlipMachineShareFolderInfo }
 }
 
 export interface ToolingDependecy{

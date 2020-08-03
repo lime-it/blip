@@ -1,22 +1,10 @@
 import execa = require('execa');
 import { CLIError } from '@oclif/errors';
-import { ToolingDependecy } from '@lime.it/blip-core';
-
-export interface VmShareFolderInfo{
-  hostPath:string;
-  guestPath:string;
-}
-
-export interface VmConfiguration{
-  cpuCount:number;
-  ramMB:number;
-  diskMB:number;
-  sharedFolders:{ [key:string]: VmShareFolderInfo }
-}
+import { ToolingDependecy, BlipMachineConfiguration, BlipMachineShareFolderInfo } from '@lime.it/blip-core';
 
 export interface VBoxManageTool extends ToolingDependecy{
-  getConfiguration(vmName:string):Promise<VmConfiguration>
-  setConfiguration(vmName:string, configuration:Partial<VmConfiguration>):Promise<void>;
+  getConfiguration(vmName:string):Promise<BlipMachineConfiguration>
+  setConfiguration(vmName:string, configuration:Partial<BlipMachineConfiguration>):Promise<void>;
 
   addSharedFolder(vmName:string, folderName:string, hostPath: string, guestPath:string):Promise<void>;
   removeSharedFolder(vmName:string, folderName:string):Promise<void>;
@@ -37,7 +25,7 @@ class VBoxManageToolImpl implements VBoxManageTool {
       throw new CLIError(`VBoxManage is missing from the current environment. Please check https://www.virtualbox.org/wiki/Downloads`);
   }
 
-  async getConfiguration(vmName: string): Promise<VmConfiguration> {
+  async getConfiguration(vmName: string): Promise<BlipMachineConfiguration> {
     const mrStdout = (await execa('VBoxManage', ['showvminfo', vmName, '--machinereadable'])).stdout;
 
     const tuples = mrStdout.split('\n').map(p => p.replace('\r', '').replace('\n', ''))
@@ -52,7 +40,7 @@ class VBoxManageToolImpl implements VBoxManageTool {
     const lines = sharedStdout.split('\n').map(p => p.replace('\r', '').replace('\n', ''))
 
     const shareLineIdx = lines.findIndex(p => p.startsWith('Shared folders:') && !p.endsWith('<none>'))
-    let shares:{ [key:string]: VmShareFolderInfo } = {};
+    let shares:{ [key:string]: BlipMachineShareFolderInfo } = {};
     if (shareLineIdx >= 0){
       const sharesLines = lines.slice(shareLineIdx + 2, shareLineIdx + 2 + lines.slice(shareLineIdx + 2).findIndex(p => p.trim().length === 0))
   
@@ -64,7 +52,7 @@ class VBoxManageToolImpl implements VBoxManageTool {
           hostPath: props.find(p => p.startsWith('Host path:'))?.replace(/^Host path:\s*/, '')?.replace(/^'(.*)'.+$/, '$1') || '',
           guestPath: props.find(p => p.startsWith('mount-point:'))?.replace(/^mount-point:\s*/, '')?.replace(/^'(.*)'$/, '$1') || '',
         }
-      }).reduce((acc, p)=>{acc[p.name]={hostPath:p.hostPath, guestPath:p.guestPath}; return acc;}, {} as { [key:string]: VmShareFolderInfo });
+      }).reduce((acc, p)=>{acc[p.name]={hostPath:p.hostPath, guestPath:p.guestPath}; return acc;}, {} as { [key:string]: BlipMachineShareFolderInfo });
     }
 
     return {
@@ -75,7 +63,7 @@ class VBoxManageToolImpl implements VBoxManageTool {
     }
   }
 
-  async setConfiguration(vmName: string, configuration: Partial<VmConfiguration>): Promise<void> {
+  async setConfiguration(vmName: string, configuration: Partial<BlipMachineConfiguration>): Promise<void> {
     if (configuration.diskMB) {
       const {stdout} = await execa('VBoxManage', ['showvminfo', vmName, '--machinereadable'])
 

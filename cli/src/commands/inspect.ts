@@ -2,7 +2,6 @@ import {Command, flags} from '@oclif/command'
 import { CLIError } from '@oclif/errors';
 import { machineNameArg } from '../arguments'
 import { BlipConf } from '@lime.it/blip-core'
-import {cli} from 'cli-ux'
 
 export default class Inspect extends Command {
   static description = 'describe the command here'
@@ -31,8 +30,5 @@ export default class Inspect extends Command {
       throw new CLIError(`Unknown machine '${args.machine}'`);
       
     process.stdout.write(JSON.stringify(machine, null, 4));
-    
-    //console.log(this.config.plugins[1].pjson.keywords);
-    // console.log(this.config.plugins.map(p=>p.pjson.name));
   }
 }
