@@ -19,7 +19,7 @@ export class DriverUtils{
         const name = p.pjson.keywords.find((k:string)=>k.startsWith('blip-driver-') && k!='blip-driver-').replace("blip-driver-","");
         return {
           name,
-          commands:p.commands.filter(c=>c.id.startsWith(name))
+          commands:p.commands.filter(c=>c.id.startsWith(`driver-${name}`))
         }
       })
       .reduce((acc, p)=>{
@@ -29,7 +29,7 @@ export class DriverUtils{
   }
 
   async getConfig(driver:string, machineName:string):Promise<BlipMachineConfiguration>{
-    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `${driver}:get-config`);
+    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `driver-${driver}:get-config`);
     if(!cmd)
       throw new Error("Command not found");
 
@@ -38,7 +38,7 @@ export class DriverUtils{
   }
 
   async setConfig(driver:string, machineName:string, configuration: Partial<BlipMachineConfiguration>):Promise<void>{
-    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `${driver}:set-config`);
+    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `driver-${driver}:set-config`);
     if(!cmd)
       throw new Error("Command not found");
 
@@ -62,7 +62,7 @@ export class DriverUtils{
   }  
 
   async parseCreateArgs(driver:string, machineName:string, configuration: Partial<BlipMachineConfiguration>):Promise<{[key:string]:string}>{
-    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `${driver}:parse-create-args`);
+    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `driver-${driver}:parse-create-args`);
     if(!cmd)
       throw new Error("Command not found");
 
@@ -88,7 +88,7 @@ export class DriverUtils{
   }  
 
   async addShare(driver:string, machineName:string, folderName: string, hostPath: string, guestPath: string):Promise<void>{
-    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `${driver}:add-share`);
+    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `driver-${driver}:add-share`);
     if(!cmd)
       throw new Error("Command not found");
 
@@ -103,7 +103,7 @@ export class DriverUtils{
   }  
 
   async removeShare(driver:string, machineName:string, folderName: string):Promise<void>{
-    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `${driver}:remove-share`);
+    const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `driver-${driver}:remove-share`);
     if(!cmd)
       throw new Error("Command not found");
 

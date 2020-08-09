@@ -27,7 +27,7 @@ export class Openssl {
     await writeFile(join(certsPath, `${domain}.crt`), pems.cert)
   }
 
-  static async domainCertificateExists(domain: string, global: boolean) {
+  static domainCertificateExists(domain: string, global: boolean) {
     let certsPath: string;
     if(global)
       certsPath = join(environment.configDir, "certs");

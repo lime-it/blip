@@ -6,3 +6,4 @@ export * from './etc-hosts';
 export * from './model';
 export * from './openssl';
 export * from './driver-arguments';
+export * from './sudo';

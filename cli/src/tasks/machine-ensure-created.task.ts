@@ -11,8 +11,7 @@ export function machineEnsureCreated(name: string, options: Partial<DockerMachin
     title: `Ensuring machine '${name}' is created`,
     task: async (ctx:MachineListTaskContext&OclifCommandTaskContext) => {
       await DockerMachine.create(name, options, driverOptions);
-      const drivers = new DriverUtils(ctx.config);
-      await drivers.setConfig(options.driver||'', name, await drivers.getConfig(options.driver||'', name));
+      
       await fillMachineListTaskContext(ctx, true);
     },
   }

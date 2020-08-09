@@ -78,7 +78,6 @@ export function workspaceEnforceConfig(): Listr.ListrTask[] {
         }))
         .filter(p=>p.toBeAdded.length>0 && p.toBeRemoved.length>0);
 
-
         const shareOps = sharesChanges.map(item=>[
           {
             skip: (ctx:any) => !isMachineRunning(ctx, item.name),

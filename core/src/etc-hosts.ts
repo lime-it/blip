@@ -1,5 +1,6 @@
 import {environment} from './environment'
 import {readFile, writeFile} from 'fs-extra'
+import { Sudo } from './sudo'
 
 const addressRegExStr = '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
 const domainRegExStr = '[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\\.[a-zA-Z0-9-]{2,})*'
@@ -27,7 +28,13 @@ export interface EtcHostsContent{
 async function readHostsFile(): Promise<EtcHostsContent> {
   const path = environment.hostsFilePath
 
-  const data = await readFile(path, 'utf-8')
+  let data:string;
+  try{
+    data = await readFile(path, 'utf-8')
+  }
+  catch(err){
+    data = (await Sudo.exec('node',["-e", `'process.stdout.write(require("fs").readFileSync("${path}","utf-8"))'`])).stdout
+  }
 
   const lines = data.split('\n').filter(p => p.length > 0)
 
@@ -50,7 +57,14 @@ async function readHostsFile(): Promise<EtcHostsContent> {
 async function writeHostsFile(content: EtcHostsContent): Promise<void> {
   const path = environment.hostsFilePath
 
-  await writeFile(path, content.comments.join('\n') + '\n' + Object.keys(content.mappings).map(p => `\t${content.mappings[p]}\t${p}`).join('\n'))
+  try{
+    await writeFile(path, content.comments.join('\n') + '\n' + Object.keys(content.mappings).map(p => `\t${content.mappings[p]}\t${p}`).join('\n'))
+  }
+  catch(err){
+    const data = content.comments.join('\\n') + '\\n' + Object.keys(content.mappings).map(p => `\\t${content.mappings[p]}\\t${p}`).join('\\n');
+    
+    await Sudo.exec('node',["-e", `'require("fs").writeFileSync("${path}","${data.replace(/"/g,'\\"')}")'`]);
+  }
 }
 
 export class EtcHosts {

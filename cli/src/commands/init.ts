@@ -7,7 +7,7 @@ import { v4 as uuid} from 'uuid';
 import Listr = require('listr');
 import { workspaceEnforceConfig } from '../tasks/workspace-enforce-config.task';
 import { workspaceUp } from '../tasks/workspace-up.task';
-import * as path from 'path'
+import { sep, resolve } from 'path';
 
 export default class Init extends Command {
   static description = 'Initialize a blip workspace in the current directory.'
@@ -23,11 +23,19 @@ export default class Init extends Command {
     "skip-setup": flags.boolean({description: 'When true, does not creates workspace machines.'})
   }
 
-  static args = [{name:'projectName', required: true, description: 'Name of the project to be created.'}]
+  static args = [
+    {name:'projectName', required: false, description: 'Name of the project to be created. If missing it will be set to the name of the current directory.'}
+  ]
 
   async run() {
-    const {args, flags} = this.parse(Init)
+    const {args, flags} = this.parse(Init)    
     
+    if(!args.projectName)
+      args.projectName = process.cwd().split(sep).reverse()[0];
+
+    if(!/^[a-zA-Z0-9].*[a-zA-Z0-9]$/.test(args.projectName))
+      throw new CLIError(`'projectName' must respect the following pattern ^[a-zA-Z0-9].*[a-zA-Z0-9]$`);
+
     if (BlipConf.isWorkspace)
       throw new CLIError(`Already in a workspace`);
 
@@ -59,7 +67,7 @@ export default class Init extends Command {
           diskMB: flags['machine-disk-size'],
           sharedFolders:{
             workspace:{
-              hostPath: path.resolve(BlipConf.getWorkspaceRootPath()),
+              hostPath: resolve(BlipConf.getWorkspaceRootPath()),
               guestPath: '/home/docker/project'
             }
           }

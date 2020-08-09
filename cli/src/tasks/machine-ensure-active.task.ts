@@ -13,7 +13,7 @@ export function machineEnsureActive(name: string): Listr.ListrTask {
 
       ensureMachineIsPresent(ctx, name);
 
-      if (isMachineRunning(ctx, name))
+      if (!isMachineRunning(ctx, name))
         await DockerMachine.start(name)
 
       await fillMachineEnvTaskContext(ctx, name);
