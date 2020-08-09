@@ -1,12 +1,13 @@
 import Listr = require('listr')
 import { DockerMachine } from '@lime.it/blip-core'
-import { WorkspaceTaskContext, fillMachineListTaskContext, MachineListTaskContext, OclifCommandTaskContext, isMachineRunning } from './utils'
+import { WorkspaceTaskContext, fillMachineListTaskContext, MachineListTaskContext, OclifCommandTaskContext, isMachineRunning, fillWorkspaceTaskContext } from './utils'
 
 export function workspaceDown(): Listr.ListrTask[] {
   return [
     {
       title: 'Stopping machines',
       task: async (ctx:OclifCommandTaskContext&MachineListTaskContext&WorkspaceTaskContext) => {
+        await fillWorkspaceTaskContext(ctx);
         await fillMachineListTaskContext(ctx, true);
 
         return new Listr(Object.keys(ctx.workspace.machines).map(name=>({

@@ -19,8 +19,6 @@ export default class VirtualboxAddShare extends Command {
   async run() {
     const {args, flags} = this.parse(VirtualboxAddShare)
     
-    await VBoxManage.ensurePresent();
-    
     await VBoxManage.addSharedFolder(flags['machine-name'], flags['share-name'], flags['share-host-path'], flags['share-guest-path']);
   }
 }

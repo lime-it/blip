@@ -1,6 +1,7 @@
+import { DriverUtils } from './../driver-utils';
 import Listr = require('listr')
 import { BlipWorkspace } from '@lime.it/blip-core'
-import { WorkspaceTaskContext, fillMachineListTaskContext, MachineListTaskContext, OclifCommandTaskContext } from './utils'
+import { WorkspaceTaskContext, fillMachineListTaskContext, MachineListTaskContext, OclifCommandTaskContext, fillWorkspaceTaskContext } from './utils'
 import { machineEnsureCreated } from './machine-ensure-created.task';
 import { machineEnsureActive } from './machine-ensure-active.task';
 import { machineSetupLocalDns } from './machine-setup-local-dns.task';
@@ -10,12 +11,23 @@ export function workspaceUp(): Listr.ListrTask[] {
     {
       title: 'Starting machines',
       task: async (ctx:OclifCommandTaskContext&MachineListTaskContext&WorkspaceTaskContext) => {
+        await fillWorkspaceTaskContext(ctx);
         await fillMachineListTaskContext(ctx, true);
 
-        return new Listr(Object.keys(ctx.workspace.machines).map(name=>[
-          machineEnsureCreated(name, null, null), //TODO: set correct args
+        const drivers = new DriverUtils(ctx.config);
+
+        const ops = (await Promise.all(Object.keys(ctx.workspace.machines)
+        .map(name=>({name, machine: ctx.workspace.machines[name]}))
+        .map(async ({name, machine})=>[
+          machineEnsureCreated(
+            name,
+            {driver:machine.driver},
+            await drivers.parseCreateArgs(machine.driver, name, machine.configuration)
+          ),
           machineEnsureActive(name)
-        ]).reduce((acc, p)=>[...acc, ...p], []));
+        ]))).reduce((acc, p)=>[...acc, ...p], [])
+
+        return new Listr(ops);
       },
     },
     {

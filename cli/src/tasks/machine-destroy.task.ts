@@ -1,6 +1,5 @@
-import { DockerMachineCreateOptions, DockerMachine } from '@lime.it/blip-core'
+import { DockerMachine } from '@lime.it/blip-core'
 import Listr = require('listr')
-import { fillMachineListTaskContext, MachineListTaskContext } from './utils';
 
 export function machineDestroy(name: string): Listr.ListrTask {
   if (!name || name.trim().length === 0)

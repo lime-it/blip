@@ -16,8 +16,6 @@ export default class VirtualboxRemoveShare extends Command {
 
   async run() {
     const {args, flags} = this.parse(VirtualboxRemoveShare)
-
-    await VBoxManage.ensurePresent();
     
     await VBoxManage.removeSharedFolder(flags['machine-name'], flags['share-name']);
   }

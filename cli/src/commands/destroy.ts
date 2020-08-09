@@ -26,7 +26,7 @@ export default class Destroy extends Command {
         ...workspaceDestroy()
       ])
 
-      await tasks.run({workspace: await BlipConf.readWorkspace()})
+      await tasks.run({workspace: await BlipConf.readWorkspace(), config: this.config})
     }
   }
 }

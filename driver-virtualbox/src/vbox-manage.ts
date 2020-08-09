@@ -2,15 +2,15 @@ import execa = require('execa');
 import { CLIError } from '@oclif/errors';
 import { ToolingDependecy, BlipMachineConfiguration, BlipMachineShareFolderInfo } from '@lime.it/blip-core';
 
-export interface VBoxManageTool extends ToolingDependecy{
-  getConfiguration(vmName:string):Promise<BlipMachineConfiguration>
-  setConfiguration(vmName:string, configuration:Partial<BlipMachineConfiguration>):Promise<void>;
+export abstract class VBoxManageTool extends ToolingDependecy{
+  abstract getConfiguration(vmName:string):Promise<BlipMachineConfiguration>
+  abstract setConfiguration(vmName:string, configuration:Partial<BlipMachineConfiguration>):Promise<void>;
 
-  addSharedFolder(vmName:string, folderName:string, hostPath: string, guestPath:string):Promise<void>;
-  removeSharedFolder(vmName:string, folderName:string):Promise<void>;
+  abstract addSharedFolder(vmName:string, folderName:string, hostPath: string, guestPath:string):Promise<void>;
+  abstract removeSharedFolder(vmName:string, folderName:string):Promise<void>;
 }
 
-class VBoxManageToolImpl implements VBoxManageTool {
+class VBoxManageToolImpl extends VBoxManageTool {
 
   private findDiskPath(lines:string[]):string{
     return (lines.find(p => /\.vmdk"$|\.vdi"$/.test(p))?.split('=')[1] as string)
@@ -20,19 +20,20 @@ class VBoxManageToolImpl implements VBoxManageTool {
     const {exitCode} = await execa('vboxmanage', ['-v']);
     return exitCode == 0;
   }
-  async ensurePresent(): Promise<void> {
-    if(await this.isPresent() == false)
-      throw new CLIError(`VBoxManage is missing from the current environment. Please check https://www.virtualbox.org/wiki/Downloads`);
+  protected toolMissingMessage():string{
+    return `VBoxManage is missing from the current environment. Please check https://www.virtualbox.org/wiki/Downloads`;
   }
 
   async getConfiguration(vmName: string): Promise<BlipMachineConfiguration> {
+    await this.ensurePresent();
+
     const mrStdout = (await execa('VBoxManage', ['showvminfo', vmName, '--machinereadable'])).stdout;
 
     const tuples = mrStdout.split('\n').map(p => p.replace('\r', '').replace('\n', ''))
 
     const diskPath = this.findDiskPath(tuples);
 
-    const diskInfoStdout = (await execa(`VBoxManage showmediuminfo ${diskPath}`)).stdout;
+    const diskInfoStdout = (await execa('VBoxManage', ['showmediuminfo', diskPath.replace(/"/g, '')])).stdout;
     const diskSize = /\d+/.exec(diskInfoStdout.split('\n').find(p => p.startsWith('Capacity')) || '')
 
     const sharedStdout = (await execa('VBoxManage', ['showvminfo', vmName])).stdout;
@@ -64,27 +65,35 @@ class VBoxManageToolImpl implements VBoxManageTool {
   }
 
   async setConfiguration(vmName: string, configuration: Partial<BlipMachineConfiguration>): Promise<void> {
-    if (configuration.diskMB) {
+    await this.ensurePresent();
+
+    const currentConf = await this.getConfiguration(vmName);
+
+    if (configuration.diskMB && configuration.diskMB!=currentConf.diskMB) {
       const {stdout} = await execa('VBoxManage', ['showvminfo', vmName, '--machinereadable'])
 
       const tuples = stdout.split('\n').map(p => p.replace('\r', '').replace('\n', ''))
 
       const diskPath = this.findDiskPath(tuples);
 
-      let {exitCode} = await execa('VBoxManage', ['modifymedium', diskPath, '--resize', configuration.diskMB.toString()]);
+      let {exitCode} = await execa('VBoxManage', ['modifymedium', diskPath.replace(/"/g, ''), '--resize', configuration.diskMB.toString()]);
       if(exitCode!=0)
         throw new Error(`Disk resize fail: exitCode: ${exitCode}`)
     }
 
     const params = []
 
-    if (configuration.cpuCount) {
+    if (configuration.cpuCount && configuration.cpuCount!=currentConf.cpuCount) {
       params.push('--cpus')
       params.push(configuration.cpuCount.toString())
     }
-    if (configuration.ramMB) {
+    if (configuration.ramMB && configuration.ramMB!=currentConf.ramMB) {
       params.push('--memory')
       params.push(configuration.ramMB.toString())
+    }
+    if (configuration.group){
+      params.push('--groups')
+      params.push(configuration.group.toString())
     }
 
     if (params.length > 0){
@@ -95,6 +104,8 @@ class VBoxManageToolImpl implements VBoxManageTool {
   }
 
   async addSharedFolder(vmName: string, folderName: string, hostPath: string, guestPath: string): Promise<void> {
+    await this.ensurePresent();
+
     await execa('VBoxManage', [
       'sharedfolder', 'add', vmName,
       '--name', folderName,
@@ -103,6 +114,8 @@ class VBoxManageToolImpl implements VBoxManageTool {
       '--auto-mount-point', guestPath])
   }
   async removeSharedFolder(vmName: string, folderName: string): Promise<void> {
+    await this.ensurePresent();
+    
     await execa('VBoxManage', ['sharedfolder', 'remove', vmName, '--name', folderName])
   }
 }

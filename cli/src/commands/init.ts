@@ -4,26 +4,33 @@ import simpleGit from 'simple-git';
 import { BlipConf } from '@lime.it/blip-core';
 import { DriverUtils } from '../driver-utils';
 import { v4 as uuid} from 'uuid';
+import Listr = require('listr');
+import { workspaceEnforceConfig } from '../tasks/workspace-enforce-config.task';
+import { workspaceUp } from '../tasks/workspace-up.task';
+import * as path from 'path'
 
 export default class Init extends Command {
   static description = 'Initialize a blip workspace in the current directory.'
 
   static flags = {
     help: flags.help({char: 'h'}),
-    "machine-name": flags.string({description: 'Docker machine name for the project', required:false, default: `blip_${uuid()}`}),
+    "machine-name": flags.string({description: 'Docker machine name for the project', required:false, default: `blip${uuid().replace(/-/g, '')}`}),
     "machine-driver": flags.string({description: 'Docker machine driver', dependsOn: ['machine-name'], default: 'virtualbox' }),
-    "machine-cpu-count": flags.integer({description: 'Docker machine cpu count', dependsOn: ['machine-name'] }),
-    "machine-ram-size": flags.integer({description: 'Docker machine ram size MB', dependsOn: ['machine-name'] }),
-    "machine-disk-size": flags.integer({description: 'Docker machine disk size MB', dependsOn: ['machine-name'] }),
+    "machine-cpu-count": flags.integer({description: 'Docker machine cpu count', dependsOn: ['machine-name'], default: 1 }),
+    "machine-ram-size": flags.integer({description: 'Docker machine ram size MB', dependsOn: ['machine-name'], default: 2048 }),
+    "machine-disk-size": flags.integer({description: 'Docker machine disk size MB', dependsOn: ['machine-name'], default: 20*1024 }),
     "skip-git": flags.boolean({description: 'When true, does not initialize a git repository.', default: false}),
     "skip-setup": flags.boolean({description: 'When true, does not creates workspace machines.'})
   }
 
-  static args = []
+  static args = [{name:'projectName', required: true, description: 'Name of the project to be created.'}]
 
   async run() {
     const {args, flags} = this.parse(Init)
     
+    if (BlipConf.isWorkspace)
+      throw new CLIError(`Already in a workspace`);
+
     const drivers = new DriverUtils(this.config);
 
     const git = simpleGit();
@@ -36,70 +43,39 @@ export default class Init extends Command {
     if(!Object.keys(drivers.drivers).includes(flags["machine-driver"]))
       throw new CLIError(`Driver '${flags["machine-driver"]}' unavailable`);
 
-    console.log(BlipConf.workspaceConfigFile)
-    console.log(Object.keys(drivers.drivers))
+    await BlipConf.createWorkspace();
 
-    //TODO: create workspace file
-    //TODO: add entry to globalregistry file
-    //TODO: create machines
-    //TODO: setup hosts
+    if(!flags["skip-setup"]){
 
-    // const machineList = await DockerMachine.ls()
+      let workspaceConfig = await BlipConf.readWorkspace();
+      
+      workspaceConfig.machines[flags['machine-name']] = {
+        attached: false,
+        driver: flags['machine-driver'],
+        domains: [`${args.projectName}.local`],
+        configuration:{
+          cpuCount: flags['machine-cpu-count'],
+          ramMB: flags['machine-ram-size'],
+          diskMB: flags['machine-disk-size'],
+          sharedFolders:{
+            workspace:{
+              hostPath: path.resolve(BlipConf.getWorkspaceRootPath()),
+              guestPath: '/home/docker/project'
+            }
+          }
+        }
+      }
 
-    // const params = await inquirer.prompt([
-    //   {
-    //     when: response => !args.projectName,
-    //     name: 'projectName',
-    //     message: 'Type the project name',
-    //     type: 'input',
-    //     default: args.projectName,
-    //   },
-    //   {
-    //     when: response => Boolean(flags.machinename) && !machineList.find(p => p.name == flags.machinename),
-    //     name: 'machineName',
-    //     message: `The machine '${flags.machinename}' does not exist. Select another ore create a new one`,
-    //     type: 'list',
-    //     choices: [{name: 'new'}, ...machineList.map(p => ({name: p}))],
-    //     default: 'new',
-    //   },
-    // ])
+      workspaceConfig.defaultMachine = flags['machine-name'];
 
-    // params.projectName = params.projectName || args.projectName
-    // params.machineName = params.machineName || 'new'
+      await BlipConf.overwriteWorkspace(workspaceConfig);
 
-    // let createMachine = false
-    // if (params.machineName == 'new') {
-    //   params.machineName = 'blip--' + uuid_v4()
-    //   createMachine = true
-    // }
+      const tasks = new Listr([
+        ...workspaceEnforceConfig(),
+        ...workspaceUp(),
+      ])
 
-    // const mirror = !flags.mirror && !flags.localmirror ? null : flags.localmirror ? `https://${environment.registry.domainName}` : flags.mirror || null
-
-    // const projectModel: ProjectModel = {
-    //   version: '1',
-    //   machines: {} as {[key: string]: ProjectMachineModel},
-    // }
-
-    // projectModel.machines[params.machineName] = {
-    //   mirror: mirror ? [mirror] : null,
-    //   domains: [`localhost.dev.${params.projectName}`],
-    //   sharedFolders: [{name: './', hostPath: './', guestPath: '/home/docker/project'}],
-    // }
-
-    // if (existsSync(`${environmentCwd()}/${params.projectName}`))
-    //   throw new Error(`Folder '${params.projectName}' already exists`)
-
-    // mkdirSync(`${environmentCwd()}/${params.projectName}`, {recursive: true})
-
-    // process.chdir(`${environmentCwd()}/${params.projectName}`)
-
-    // mkdirSync(envrionmentDataPath(), {recursive: true})
-    // await saveProjectModel(projectModel)
-
-    // const tasks = new Listr([
-    //   ...environmentApplyConfiguraiton(),
-    // ])
-
-    // await tasks.run()
+      await tasks.run({workspace: await BlipConf.readWorkspace(), config: this.config})
+    }
   }
 }

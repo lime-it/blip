@@ -20,6 +20,6 @@ export default class Down extends Command {
       ...workspaceDown(),
     ])
 
-    await tasks.run({workspace: await BlipConf.readWorkspace()})
+    await tasks.run({workspace: await BlipConf.readWorkspace(), config: this.config})
   }
 }

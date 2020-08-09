@@ -28,9 +28,15 @@ export async function fillMachineEnvTaskContext(ctx:any, name:string){
   return ctx as MachineEnvTaskContext;
 }
 
+export async function fillWorkspaceTaskContext(ctx:any){
+  ctx.workspace = await BlipConf.readWorkspace();
+  return ctx as WorkspaceTaskContext;
+}
+
 export function isMachinePresent(ctx:MachineListTaskContext, name:string):boolean{
   return !!ctx.machineList.find(p => p.name === name);
 }
+
 export function isMachineRunning(ctx:MachineListTaskContext, name:string):boolean{  
   const machine = ctx.machineList.find(p => p.name === name);
   return machine?.state?.toLowerCase() === 'running'
@@ -49,9 +55,4 @@ export function ensureMachineIsPresentAndRunning(ctx:MachineListTaskContext, nam
 
   if (machine.state?.toLowerCase() !== 'running')
     throw new Error('Machine not running')
-}
-
-export async function fillWorkspaceTaskContext(ctx:any){
-  ctx.workspace = await BlipConf.readWorkspace();
-  return ctx as WorkspaceTaskContext;
 }

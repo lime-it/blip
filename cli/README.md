@@ -20,7 +20,7 @@ $ npm install -g @lime.it/blip
 $ blip COMMAND
 running command...
 $ blip (-v|--version|version)
-@lime.it/blip/0.2.3 win32-x64 node-v10.16.0
+@lime.it/blip/0.2.3 linux-x64 node-v12.18.3
 $ blip --help [COMMAND]
 USAGE
   $ blip COMMAND
@@ -31,14 +31,14 @@ USAGE
 <!-- commands -->
 * [`blip destroy`](#blip-destroy)
 * [`blip docker`](#blip-docker)
-* [`blip docker-compose [FILE]`](#blip-docker-compose-file)
+* [`blip docker-compose`](#blip-docker-compose)
 * [`blip docker-machine`](#blip-docker-machine)
 * [`blip down`](#blip-down)
 * [`blip env [MACHINE]`](#blip-env-machine)
 * [`blip git`](#blip-git)
 * [`blip help [COMMAND]`](#blip-help-command)
-* [`blip init`](#blip-init)
-* [`blip inspect [LINKNAME]`](#blip-inspect-linkname)
+* [`blip init PROJECTNAME`](#blip-init-projectname)
+* [`blip inspect [MACHINE]`](#blip-inspect-machine)
 * [`blip ls`](#blip-ls)
 * [`blip plugins`](#blip-plugins)
 * [`blip plugins:install PLUGIN...`](#blip-pluginsinstall-plugin)
@@ -59,7 +59,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\destroy.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\destroy.ts)_
+_See code: [src/commands/destroy.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/destroy.ts)_
 
 ## `blip docker`
 
@@ -73,23 +73,21 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\docker.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\docker.ts)_
+_See code: [src/commands/docker.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/docker.ts)_
 
-## `blip docker-compose [FILE]`
+## `blip docker-compose`
 
 describe the command here
 
 ```
 USAGE
-  $ blip docker-compose [FILE]
+  $ blip docker-compose
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help  show CLI help
 ```
 
-_See code: [src\commands\docker-compose.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\docker-compose.ts)_
+_See code: [src/commands/docker-compose.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/docker-compose.ts)_
 
 ## `blip docker-machine`
 
@@ -103,7 +101,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\docker-machine.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\docker-machine.ts)_
+_See code: [src/commands/docker-machine.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/docker-machine.ts)_
 
 ## `blip down`
 
@@ -117,7 +115,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\down.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\down.ts)_
+_See code: [src/commands/down.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/down.ts)_
 
 ## `blip env [MACHINE]`
 
@@ -135,7 +133,7 @@ OPTIONS
   --shell=shell  [default: bash] Command output destination shell type.
 ```
 
-_See code: [src\commands\env.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\env.ts)_
+_See code: [src/commands/env.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/env.ts)_
 
 ## `blip git`
 
@@ -149,7 +147,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\git.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\git.ts)_
+_See code: [src/commands/git.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/git.ts)_
 
 ## `blip help [COMMAND]`
 
@@ -166,38 +164,53 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src\commands\help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
 
-## `blip init`
+## `blip init PROJECTNAME`
 
 Initialize a blip workspace in the current directory.
 
 ```
 USAGE
-  $ blip init
+  $ blip init PROJECTNAME
+
+ARGUMENTS
+  PROJECTNAME  Name of the project to be created.
 
 OPTIONS
-  -h, --help                   show CLI help
-  --machine-name=machine-name  Docker machine name for the project
-  --skip-git                   When true, does not initialize a git repository.
-  --skip-setup                 When true, does not creates workspace machines.
+  -h, --help                             show CLI help
+  --machine-cpu-count=machine-cpu-count  [default: 1] Docker machine cpu count
+  --machine-disk-size=machine-disk-size  [default: 20480] Docker machine disk size MB
+  --machine-driver=machine-driver        [default: virtualbox] Docker machine driver
+
+  --machine-name=machine-name            [default: blip_71f716da-1227-4914-b5c7-fef28c6e0ea0] Docker machine name for
+                                         the project
+
+  --machine-ram-size=machine-ram-size    [default: 2048] Docker machine ram size MB
+
+  --skip-git                             When true, does not initialize a git repository.
+
+  --skip-setup                           When true, does not creates workspace machines.
 ```
 
-_See code: [src\commands\init.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\init.ts)_
+_See code: [src/commands/init.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/init.ts)_
 
-## `blip inspect [LINKNAME]`
+## `blip inspect [MACHINE]`
 
 describe the command here
 
 ```
 USAGE
-  $ blip inspect [LINKNAME]
+  $ blip inspect [MACHINE]
+
+ARGUMENTS
+  MACHINE  Name of the workspace machine. If not specified the first will be used.
 
 OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\inspect.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\inspect.ts)_
+_See code: [src/commands/inspect.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/inspect.ts)_
 
 ## `blip ls`
 
@@ -211,7 +224,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\ls.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\ls.ts)_
+_See code: [src/commands/ls.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/ls.ts)_
 
 ## `blip plugins`
 
@@ -228,7 +241,7 @@ EXAMPLE
   $ blip plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src\commands\plugins\index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/index.ts)_
 
 ## `blip plugins:install PLUGIN...`
 
@@ -264,7 +277,7 @@ EXAMPLES
   $ blip plugins:install someuser/someplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src\commands\plugins\install.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/install.ts)_
 
 ## `blip plugins:link PLUGIN`
 
@@ -291,7 +304,7 @@ EXAMPLE
   $ blip plugins:link myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src\commands\plugins\link.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/link.ts)_
 
 ## `blip plugins:uninstall PLUGIN...`
 
@@ -313,7 +326,7 @@ ALIASES
   $ blip plugins:remove
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src\commands\plugins\uninstall.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/uninstall.ts)_
 
 ## `blip plugins:update`
 
@@ -328,7 +341,7 @@ OPTIONS
   -v, --verbose
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src\commands\plugins\update.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/update.ts)_
 
 ## `blip up`
 
@@ -342,5 +355,5 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src\commands\up.ts](https://github.com/lime-it/blip/blob/v0.2.3/src\commands\up.ts)_
+_See code: [src/commands/up.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/up.ts)_
 <!-- commandsstop -->

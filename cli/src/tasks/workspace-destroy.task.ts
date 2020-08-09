@@ -1,5 +1,5 @@
 import Listr = require('listr')
-import { WorkspaceTaskContext } from './utils'
+import { WorkspaceTaskContext, fillWorkspaceTaskContext } from './utils'
 import { machineDestroy } from './machine-destroy.task';
 import { machineTearDownLocalDns } from './machine-teardown-local-dns.task';
 
@@ -8,6 +8,8 @@ export function workspaceDestroy(): Listr.ListrTask[] {
     {
       title: "Destroying workspace",
       task: async (ctx:WorkspaceTaskContext)=>{
+        await fillWorkspaceTaskContext(ctx);
+        
         return new Listr(Object.keys(ctx.workspace.machines).filter(name=>!ctx.workspace.machines[name].attached).map(name=>[
           machineDestroy(name),
           {

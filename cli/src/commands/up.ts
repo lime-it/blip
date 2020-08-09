@@ -22,6 +22,6 @@ export default class Up extends Command {
       ...workspaceUp(),
     ])
 
-    await tasks.run({workspace: await BlipConf.readWorkspace()})
+    await tasks.run({workspace: await BlipConf.readWorkspace(), config: this.config})
   }
 }

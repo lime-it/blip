@@ -43,27 +43,28 @@ const defaultOptions: DockerMachineCreateOptions = {
   engineInsecureRegistry: null,
 }
 
-export interface DockerMachineTool extends ToolingDependecy {
-  ls(...fields: (keyof DockerMachineListResult)[]):Promise<DockerMachineListResult[]>;
-  create(name: string, options: Partial<DockerMachineCreateOptions>, direverOptions: {[key: string]: string}):Promise<void>;
-  env(name: string, shell: string):Promise<DockerMachineEnv>;
-  envStdout(name: string, shell: string):Promise<string>;
-  start(name: string):Promise<void>;
-  stop(name: string):Promise<void>;
-  remove(name: string):Promise<void>;
+export abstract class DockerMachineTool extends ToolingDependecy {
+  abstract ls(...fields: (keyof DockerMachineListResult)[]):Promise<DockerMachineListResult[]>;
+  abstract create(name: string, options: Partial<DockerMachineCreateOptions>, direverOptions: {[key: string]: string}):Promise<void>;
+  abstract env(name: string, shell: string):Promise<DockerMachineEnv>;
+  abstract envStdout(name: string, shell: string):Promise<string>;
+  abstract start(name: string):Promise<void>;
+  abstract stop(name: string):Promise<void>;
+  abstract remove(name: string):Promise<void>;
 }
 
-class DockerMachineToolImpl implements DockerMachineTool {
+class DockerMachineToolImpl extends DockerMachineTool {
   async isPresent(): Promise<boolean> {
     const {exitCode} = await execa('docker-machine', ['-v']);
     return exitCode == 0;
   }
-  async ensurePresent(): Promise<void> {
-    if(await this.isPresent() == false)
-      throw new CLIError(`Docker machine is missing from the current environment. Please check https://docs.docker.com/machine/install-machine/`);
+  protected toolMissingMessage():string{
+    return `Docker machine is missing from the current environment. Please check https://docs.docker.com/machine/install-machine/`;
   }
 
   async ls(...fields: (keyof DockerMachineListResult)[]) {
+    await this.ensurePresent();
+
     fields = fields && fields.length > 0 ? fields : ['name', 'active', 'activeHost', 'activeSwarm', 'driverName', 'state', 'URL', 'swarm', 'error', 'dockerVersion', 'responseTime']
     const format = fields.map(p => `{{.${(p.charAt(0).toUpperCase() + p.substring(1))}}}`).join('|')
 
@@ -78,6 +79,8 @@ class DockerMachineToolImpl implements DockerMachineTool {
   }
 
   async create(name: string, options: Partial<DockerMachineCreateOptions> = defaultOptions, direverOptions: {[key: string]: string} = {}) {
+    await this.ensurePresent();
+
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
     
@@ -101,7 +104,7 @@ class DockerMachineToolImpl implements DockerMachineTool {
 
     Object.keys(direverOptions).forEach(key => {
       commandOptions.push(key)
-      if (direverOptions[key] !== null)
+      if (direverOptions[key] !== null && direverOptions[key]!==undefined)
         commandOptions.push(direverOptions[key])
     })
 
@@ -109,6 +112,8 @@ class DockerMachineToolImpl implements DockerMachineTool {
   }
 
   async env(name: string, shell = 'bash') {
+    await this.ensurePresent();
+
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
@@ -125,6 +130,8 @@ class DockerMachineToolImpl implements DockerMachineTool {
   }
 
   async envStdout(name: string, shell = 'bash') {
+    await this.ensurePresent();
+
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
@@ -134,6 +141,8 @@ class DockerMachineToolImpl implements DockerMachineTool {
   }
 
   async start(name: string) {
+    await this.ensurePresent();
+
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
@@ -141,6 +150,8 @@ class DockerMachineToolImpl implements DockerMachineTool {
   }
 
   async stop(name: string) {
+    await this.ensurePresent();
+
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 
@@ -148,6 +159,8 @@ class DockerMachineToolImpl implements DockerMachineTool {
   }
 
   async remove(name: string) {
+    await this.ensurePresent();
+    
     if (!name || name.trim().length === 0)
       throw new Error('\'name\' must be set')
 

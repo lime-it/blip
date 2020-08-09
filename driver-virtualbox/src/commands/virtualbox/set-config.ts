@@ -18,10 +18,9 @@ export default class VirtualboxSetConfig extends Command {
 
   async run() {
     const {args, flags} = this.parse(VirtualboxSetConfig)
-    
-    await VBoxManage.ensurePresent();
 
     await VBoxManage.setConfiguration(flags['machine-name'], {
+      group: '/blip',
       cpuCount: flags['cpu-count'],
       ramMB: flags['ram-size'],
       diskMB: flags['disk-size']

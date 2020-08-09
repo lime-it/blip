@@ -61,7 +61,7 @@ export class DriverUtils{
       throw new Error("Error setting machine configuration.");
   }  
 
-  async parseCreateArgs(driver:string, machineName:string, configuration: Partial<BlipMachineConfiguration>):Promise<{[key:string]:string|number|boolean|null}>{
+  async parseCreateArgs(driver:string, machineName:string, configuration: Partial<BlipMachineConfiguration>):Promise<{[key:string]:string}>{
     const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `${driver}:parse-create-args`);
     if(!cmd)
       throw new Error("Command not found");
@@ -81,8 +81,10 @@ export class DriverUtils{
     }
   
     const result = await execa(process.argv[1], args);
+    const jresult = JSON.parse(result.stdout);
+    Object.keys(jresult).forEach(name=>jresult[name]=jresult[name]?.toString())
 
-    return JSON.parse(result.stdout);
+    return jresult;
   }  
 
   async addShare(driver:string, machineName:string, folderName: string, hostPath: string, guestPath: string):Promise<void>{

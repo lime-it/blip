@@ -16,8 +16,6 @@ export default class VirtualboxGetConfig extends Command {
   async run() {
     const {args, flags} = this.parse(VirtualboxGetConfig)
     
-    await VBoxManage.ensurePresent();
-    
     const result = await VBoxManage.getConfiguration(flags['machine-name']);
 
     process.stdout.write(JSON.stringify(result, null, 4));

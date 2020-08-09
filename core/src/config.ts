@@ -5,11 +5,9 @@ import { BlipWorkspace, GlobalBlipConfiguration } from './model';
 import {CLIError} from '@oclif/errors';
 import { environment } from './environment';
 
+const { version } = require('./package.json');
+
 const currentWorkingDirectory = process.cwd();
-const currentWorkspaceDirectory = currentWorkingDirectory.split(sep)
-  .reduce((acc, current, index, original)=> acc.length==0 ? original.map(x=>[current]) : acc.map((p, i)=> i>=original.length-index ? p : [...p, current]), [] as string[][])
-  .map(p => join(...p))
-  .find(p => existsSync(join(p, "blip.yml")) && existsSync(join(p, ".blip"))) || currentWorkingDirectory
 
 export interface BlipConfiguration {
   currentWorkingDir: string;
@@ -17,6 +15,8 @@ export interface BlipConfiguration {
   workspaceConfigPath: string;
   globalConfigFilePath: string;
   isWorkspace: boolean;
+  getWorkspaceRootPath(): string;
+  createWorkspace(): Promise<void>;
   readWorkspace(): Promise<BlipWorkspace>;
   overwriteWorkspace(model:BlipWorkspace):Promise<void>;
   readGlobalConfiguration():Promise<GlobalBlipConfiguration>;
@@ -30,10 +30,10 @@ class BlipConfigurationImpl implements BlipConfiguration{
     return currentWorkingDirectory;
   }
   get workspaceConfigFile():string{
-    return join(currentWorkspaceDirectory, "blip.yml");
+    return join(this.getWorkspaceRootPath(), "blip.yml");
   }
   get workspaceConfigPath():string{
-    return join(currentWorkspaceDirectory, ".blip");
+    return join(this.getWorkspaceRootPath(), ".blip");
   }
   get globalConfigFilePath():string{
     return join(environment.configDir, "config.yml");
@@ -41,6 +41,20 @@ class BlipConfigurationImpl implements BlipConfiguration{
 
   get isWorkspace():boolean{
     return existsSync(this.workspaceConfigFile) && existsSync(this.workspaceConfigPath);
+  }
+
+  getWorkspaceRootPath(): string {
+    return currentWorkingDirectory.split(sep)
+    .reduce((acc, current, index, original)=> acc.length==0 ? original.map(x=>[current]) : acc.map((p, i)=> i>=original.length-index ? p : [...p, current]), [] as string[][])
+    .map(p => join(...p))
+    .find(p => existsSync(join(p, "blip.yml")) && existsSync(join(p, ".blip"))) || currentWorkingDirectory;
+  }
+
+  async createWorkspace(): Promise<void> {
+    if(!this.isWorkspace){
+      await writeFile(this.workspaceConfigFile, YAML.stringify({version:version, defaultMachine: null, machines: {}}));
+      await mkdirp(this.workspaceConfigPath);
+    }
   }
 
   async readWorkspace():Promise<BlipWorkspace>{

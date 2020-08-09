@@ -18,21 +18,22 @@ export interface DockerPsResult{
     networks?: string;
 }
 
-export interface DockerTool extends ToolingDependecy{
-  ps(machineEnvVars: DockerMachineEnv, ...fields: (keyof DockerPsResult)[]): Promise<DockerPsResult[]>;
+export abstract class DockerTool extends ToolingDependecy{
+  abstract ps(machineEnvVars: DockerMachineEnv, ...fields: (keyof DockerPsResult)[]): Promise<DockerPsResult[]>;
 }
 
-class DockerToolImpl implements DockerTool {
+class DockerToolImpl extends DockerTool {
   async isPresent(): Promise<boolean> {
     const {exitCode} = await execa('docker', ['-v']);
     return exitCode == 0;
   }
-  async ensurePresent(): Promise<void> {
-    if(await this.isPresent() == false)
-      throw new CLIError(`Docker is missing from the current environment. Please check https://docs.docker.com/engine/install/`);
+  protected toolMissingMessage():string{
+    return `Docker is missing from the current environment. Please check https://docs.docker.com/engine/install/`;
   }
 
   async ps(machineEnvVars: DockerMachineEnv, ...fields: (keyof DockerPsResult)[]): Promise<DockerPsResult[]> {
+    await this.ensurePresent();
+    
     fields = fields && fields.length > 0 ? fields : ['id', 'image', 'command', 'createdAt', 'runningFor', 'ports', 'status', 'size', 'names', 'labels', 'mounts', 'networks']
     const format = fields.map(p => p === 'id' ? '{{.ID}}' : `{{.${(p.charAt(0).toUpperCase() + p.substring(1))}}}`).join('|')
 

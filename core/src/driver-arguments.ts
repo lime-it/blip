@@ -1,4 +1,4 @@
-import {args, flags} from '@oclif/parser'
+import {flags} from '@oclif/parser'
 
 export const machineNameFlag = flags.string({
   name: 'machine-name',

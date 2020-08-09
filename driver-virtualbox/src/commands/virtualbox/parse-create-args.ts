@@ -22,7 +22,7 @@ export default class VirtualboxParseCreateArgs extends Command {
     await VBoxManage.ensurePresent();
     
     const result: any = {
-      '--virtualbox-host-dns-resolver': null,
+      '--virtualbox-host-dns-resolver': null
     }
 
     if (flags['ram-size'])

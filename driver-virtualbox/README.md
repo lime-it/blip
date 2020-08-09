@@ -20,7 +20,7 @@ $ npm install -g @lime.it/blip-driver-virtualbox
 $ @lime.it/blip-driver-virtualbox COMMAND
 running command...
 $ @lime.it/blip-driver-virtualbox (-v|--version|version)
-@lime.it/blip-driver-virtualbox/0.1.0 win32-x64 node-v10.16.0
+@lime.it/blip-driver-virtualbox/0.1.0 linux-x64 node-v12.18.3
 $ @lime.it/blip-driver-virtualbox --help [COMMAND]
 USAGE
   $ @lime.it/blip-driver-virtualbox COMMAND
