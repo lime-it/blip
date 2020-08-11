@@ -10,10 +10,10 @@ const hook: Hook<'prerun'> = async function (command) {
     const templates = new TemplateUtils(command.config);
 
     const tplName = workspace.template?.name||'';
-    const tplCommand = templates.templates[tplName].commands.find(p=>p.id==`template-${name}:hook_pre_${command.Command.id}`);
+    const tplCommand = templates.getPrerunCommandHook(tplName, command.Command.id);
 
     if(!!tplCommand){
-      await execa(process.argv[1], [tplCommand!.id])
+      await tplCommand.load().run([]);
     }
   }
 }

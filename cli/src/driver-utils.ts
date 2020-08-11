@@ -33,8 +33,7 @@ export class DriverUtils{
     if(!cmd)
       throw new Error("Command not found");
 
-    const result = await execa(process.argv[1], [cmd!.id, '--machine-name', machineName]);
-    return JSON.parse(result.stdout);
+    return await cmd.load().run(['--machine-name', machineName]);
   }
 
   async setConfig(driver:string, machineName:string, configuration: Partial<BlipMachineConfiguration>):Promise<void>{
@@ -42,7 +41,7 @@ export class DriverUtils{
     if(!cmd)
       throw new Error("Command not found");
 
-    const args = [cmd!.id, '--machine-name', machineName];
+    const args = ['--machine-name', machineName];
     if(configuration.cpuCount){
       args.push("--cpu-count");
       args.push(configuration.cpuCount.toString())
@@ -56,9 +55,12 @@ export class DriverUtils{
       args.push(configuration.diskMB.toString())
     }
 
-    const result = await execa(process.argv[1], args);
-    if(result.exitCode!=0)
+    try{
+      return await cmd.load().run(args);
+    }
+    catch(err){
       throw new Error("Error setting machine configuration.");
+    }
   }  
 
   async parseCreateArgs(driver:string, machineName:string, configuration: Partial<BlipMachineConfiguration>):Promise<{[key:string]:string}>{
@@ -66,7 +68,7 @@ export class DriverUtils{
     if(!cmd)
       throw new Error("Command not found");
 
-    const args = [cmd!.id, '--machine-name', machineName];
+    const args = ['--machine-name', machineName];
     if(configuration.cpuCount){
       args.push("--cpu-count");
       args.push(configuration.cpuCount.toString())
@@ -80,8 +82,7 @@ export class DriverUtils{
       args.push(configuration.diskMB.toString())
     }
   
-    const result = await execa(process.argv[1], args);
-    const jresult = JSON.parse(result.stdout);
+    const jresult = await cmd.load().run(args);
     Object.keys(jresult).forEach(name=>jresult[name]=jresult[name]?.toString())
 
     return jresult;
@@ -92,14 +93,16 @@ export class DriverUtils{
     if(!cmd)
       throw new Error("Command not found");
 
-    const result = await execa(process.argv[1], [cmd!.id, '--machine-name', machineName,
-      '--share-name', folderName,
-      '--share-host-path', hostPath,
-      '--share-guest-path', guestPath
-    ]);
-
-    if(result.exitCode!=0)
+    try{
+      const result = await cmd.load().run(['--machine-name', machineName,
+        '--share-name', folderName,
+        '--share-host-path', hostPath,
+        '--share-guest-path', guestPath
+      ]);
+    }
+    catch(err){
       throw new Error("Error setting machine configuration.");
+    }
   }  
 
   async removeShare(driver:string, machineName:string, folderName: string):Promise<void>{
@@ -107,11 +110,13 @@ export class DriverUtils{
     if(!cmd)
       throw new Error("Command not found");
 
-    const result = await execa(process.argv[1], [cmd!.id, '--machine-name', machineName,
-      '--share-name', folderName
-    ]);
-
-    if(result.exitCode!=0)
+    try{
+      const result = await cmd.load().run(['--machine-name', machineName,
+        '--share-name', folderName
+      ]);
+    }
+    catch(err){
       throw new Error("Error setting machine configuration.");
+    }
   }
 }

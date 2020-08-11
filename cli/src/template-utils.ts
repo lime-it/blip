@@ -28,14 +28,24 @@ export class TemplateUtils{
         return acc;
       }, {} as {[key:string]:{description:string, commands:Command.Plugin[]}});
   }
+  
+  getSetupCommand(template:string):Command.Plugin|null{
+    return this.templates[template]?.commands?.find(c=>c.id==`template-${template}:__setup`) || null;
+  }
+  
+  getTeardownCommand(template:string):Command.Plugin|null{
+    return this.templates[template]?.commands?.find(c=>c.id==`template-${template}:__teardown`) || null;
+  }
+  
+  getPrerunCommandHook(template:string, commandId:string):Command.Plugin|null{
+    return this.templates[template]?.commands?.find(c=>c.id==`template-${template}:__hook_prerun_${commandId}`) || null;
+  }
+  
+  getPostrunCommandHook(template:string, commandId:string):Command.Plugin|null{
+    return this.templates[template]?.commands?.find(c=>c.id==`template-${template}:__hook_postrun_${commandId}`) || null;
+  }
 
-  //TODO: complete
-  async init(template:string):Promise<void>{
-    const cmd = this.templates[template]?.commands?.find(p=>p.id == `template-${template}:init`);
-    if(!cmd)
-      throw new Error("Command not found");
-
-    const result = await execa(process.argv[1], [cmd!.id, '--machine-name', 'arg']);
-    return JSON.parse(result.stdout);
+  getCommands(template:string){
+    return this.templates[template]?.commands?.filter(c=>c.id.startsWith(`template-${template}:`) && !c.id.startsWith(`template-${template}:__`)) || null;
   }
 }

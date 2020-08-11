@@ -27,6 +27,9 @@ export default class TplUse extends Command {
       nextTemplateName=null;
     }
     else if(!args.templateName){
+      if(Object.keys(templates.templates).length==0)
+        throw new CLIError("No templates available");
+
       nextTemplateName = (await inquirer.prompt([{
         name: 'tempalteName',
         message: 'select a template',
@@ -39,7 +42,7 @@ export default class TplUse extends Command {
     }
 
     const nextTemplate = templates.templates[nextTemplateName||''];
-    if(!nextTemplate && nextTemplateName!==null)
+    if(!nextTemplate && !flags.none)
       throw new CLIError(`Unavailable template '${nextTemplateName}'`);
 
     const workspace = await BlipConf.readWorkspace();
@@ -59,13 +62,13 @@ export default class TplUse extends Command {
       if (!unapply)
         return;
 
-      const teardownCmd = currentTeplate.commands.find(c=>c.id==`template-${workspace.template?.name}:__teardown`);
+      const teardownCmd = templates.getTeardownCommand(workspace.template?.name);
       if(teardownCmd){
         const teardown = 
           flags.yes || (await cli.prompt(`Do you want to perform its teardown command (Yn)?`)).toLowerCase().charAt(0) == 'y';
 
         if(teardown)
-          await execa(process.argv[1], [teardownCmd!.id])            
+          await teardownCmd.load().run([]); 
       }
     }
 
@@ -74,9 +77,12 @@ export default class TplUse extends Command {
     }
     else{
 
-      const setupCmd = nextTemplate.commands.find(c=>c.id==`template-${nextTemplateName}:__setup`);
+      const setupCmd = templates.getSetupCommand(nextTemplateName);
 
-      const templateConf = !!setupCmd ? JSON.parse((await execa(process.argv[1], [setupCmd!.id])).stdout) : null;
+      let templateConf = null;
+      if(!!setupCmd){
+        templateConf = await setupCmd.load().run([]);
+      }
 
       await BlipConf.overwriteWorkspace({...workspace, template: {name:nextTemplateName, configuration: templateConf}});
     }

@@ -18,6 +18,6 @@ export default class VirtualboxGetConfig extends Command {
     
     const result = await VBoxManage.getConfiguration(flags['machine-name']);
 
-    process.stdout.write(JSON.stringify(result, null, 4));
+    return result;
   }
 }

@@ -34,6 +34,6 @@ export default class VirtualboxParseCreateArgs extends Command {
     if (flags['disk-size'])
       result['--virtualbox-disk-size'] = flags['disk-size']
 
-    process.stdout.write(JSON.stringify(result, null, 4));
+    return result;
   }
 }

@@ -20,7 +20,7 @@ $ npm install -g @lime.it/blip
 $ blip COMMAND
 running command...
 $ blip (-v|--version|version)
-@lime.it/blip/0.2.3 linux-x64 node-v12.18.3
+@lime.it/blip/1.0.0 linux-x64 node-v12.18.3
 $ blip --help [COMMAND]
 USAGE
   $ blip COMMAND
@@ -45,9 +45,19 @@ USAGE
 * [`blip plugins:link PLUGIN`](#blip-pluginslink-plugin)
 * [`blip plugins:uninstall PLUGIN...`](#blip-pluginsuninstall-plugin)
 * [`blip plugins:update`](#blip-pluginsupdate)
-* [`blip tpl [FILE]`](#blip-tpl-file)
+* [`blip template-wordpress:__hook_postrun_up [FILE]`](#blip-template-wordpress__hook_postrun_up-file)
+* [`blip template-wordpress:__hook_prerun_down [FILE]`](#blip-template-wordpress__hook_prerun_down-file)
+* [`blip template-wordpress:__setup`](#blip-template-wordpress__setup)
+* [`blip template-wordpress:__teardown [FILE]`](#blip-template-wordpress__teardown-file)
+* [`blip template-wordpress:commit [FILE]`](#blip-template-wordpresscommit-file)
+* [`blip template-wordpress:extract [FILE]`](#blip-template-wordpressextract-file)
+* [`blip template-wordpress:load [FILE]`](#blip-template-wordpressload-file)
+* [`blip template-wordpress:pack [FILE]`](#blip-template-wordpresspack-file)
+* [`blip template-wordpress:publish [FILE]`](#blip-template-wordpresspublish-file)
+* [`blip tpl [COMMAND]`](#blip-tpl-command)
+* [`blip tpl:help COMMAND`](#blip-tplhelp-command)
 * [`blip tpl:ls`](#blip-tplls)
-* [`blip tpl:use [FILE]`](#blip-tpluse-file)
+* [`blip tpl:use [TEMPLATENAME]`](#blip-tpluse-templatename)
 * [`blip up`](#blip-up)
 
 ## `blip destroy`
@@ -60,9 +70,10 @@ USAGE
 
 OPTIONS
   -h, --help  show CLI help
+  -y, --yes   If set make yes the default answer to adavance prompts.
 ```
 
-_See code: [src/commands/destroy.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/destroy.ts)_
+_See code: [src/commands/destroy.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/destroy.ts)_
 
 ## `blip docker`
 
@@ -76,7 +87,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/docker.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/docker.ts)_
+_See code: [src/commands/docker.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/docker.ts)_
 
 ## `blip docker-compose`
 
@@ -90,7 +101,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/docker-compose.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/docker-compose.ts)_
+_See code: [src/commands/docker-compose.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/docker-compose.ts)_
 
 ## `blip docker-machine`
 
@@ -104,7 +115,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/docker-machine.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/docker-machine.ts)_
+_See code: [src/commands/docker-machine.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/docker-machine.ts)_
 
 ## `blip down`
 
@@ -118,7 +129,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/down.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/down.ts)_
+_See code: [src/commands/down.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/down.ts)_
 
 ## `blip env [MACHINE]`
 
@@ -136,7 +147,7 @@ OPTIONS
   --shell=shell  [default: bash] Command output destination shell type.
 ```
 
-_See code: [src/commands/env.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/env.ts)_
+_See code: [src/commands/env.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/env.ts)_
 
 ## `blip git`
 
@@ -150,7 +161,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/git.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/git.ts)_
+_See code: [src/commands/git.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/git.ts)_
 
 ## `blip help [COMMAND]`
 
@@ -186,7 +197,7 @@ OPTIONS
   --machine-disk-size=machine-disk-size  [default: 20480] Docker machine disk size MB
   --machine-driver=machine-driver        [default: virtualbox] Docker machine driver
 
-  --machine-name=machine-name            [default: blip130dc855d43141c2a21783a08ac97b8d] Docker machine name for the
+  --machine-name=machine-name            [default: blip22831276739f44778226d472afa93b9d] Docker machine name for the
                                          project
 
   --machine-ram-size=machine-ram-size    [default: 2048] Docker machine ram size MB
@@ -196,7 +207,7 @@ OPTIONS
   --skip-setup                           When true, does not creates workspace machines.
 ```
 
-_See code: [src/commands/init.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/init.ts)_
 
 ## `blip inspect [MACHINE]`
 
@@ -213,7 +224,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/inspect.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/inspect.ts)_
+_See code: [src/commands/inspect.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/inspect.ts)_
 
 ## `blip ls`
 
@@ -227,7 +238,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/ls.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/ls.ts)_
+_See code: [src/commands/ls.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/ls.ts)_
 
 ## `blip plugins`
 
@@ -346,13 +357,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/update.ts)_
 
-## `blip tpl [FILE]`
+## `blip template-wordpress:__hook_postrun_up [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ blip tpl [FILE]
+  $ blip template-wordpress:__hook_postrun_up [FILE]
 
 OPTIONS
   -f, --force
@@ -360,7 +371,162 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/tpl/index.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/tpl/index.ts)_
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/__hook_postrun_up.ts)_
+
+## `blip template-wordpress:__hook_prerun_down [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:__hook_prerun_down [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/__hook_prerun_down.ts)_
+
+## `blip template-wordpress:__setup`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:__setup
+
+OPTIONS
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/__setup.ts)_
+
+## `blip template-wordpress:__teardown [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:__teardown [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/__teardown.ts)_
+
+## `blip template-wordpress:commit [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:commit [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/commit.ts)_
+
+## `blip template-wordpress:extract [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:extract [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/extract.ts)_
+
+## `blip template-wordpress:load [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:load [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/load.ts)_
+
+## `blip template-wordpress:pack [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:pack [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/pack.ts)_
+
+## `blip template-wordpress:publish [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip template-wordpress:publish [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [@lime.it/blip-template-wordpress](https://github.com/lime-it/blip-wordpress/blob/v0.1.0/src/commands/template-wordpress/publish.ts)_
+
+## `blip tpl [COMMAND]`
+
+Execute available template commands
+
+```
+USAGE
+  $ blip tpl [COMMAND]
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/tpl/index.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/tpl/index.ts)_
+
+## `blip tpl:help COMMAND`
+
+Shows help of an available tempalte command
+
+```
+USAGE
+  $ blip tpl:help COMMAND
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/tpl/help.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/tpl/help.ts)_
 
 ## `blip tpl:ls`
 
@@ -374,23 +540,26 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/tpl/ls.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/tpl/ls.ts)_
+_See code: [src/commands/tpl/ls.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/tpl/ls.ts)_
 
-## `blip tpl:use [FILE]`
+## `blip tpl:use [TEMPLATENAME]`
 
-describe the command here
+Use a specified template
 
 ```
 USAGE
-  $ blip tpl:use [FILE]
+  $ blip tpl:use [TEMPLATENAME]
+
+ARGUMENTS
+  TEMPLATENAME  Name of the template to use. If absent it will be asked.
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help  show CLI help
+  -y, --yes   If set make yes the default answer to adavance prompts.
+  --none      If set no template will be used. If one is currently in use its teardown procedure will be invoked.
 ```
 
-_See code: [src/commands/tpl/use.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/tpl/use.ts)_
+_See code: [src/commands/tpl/use.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/tpl/use.ts)_
 
 ## `blip up`
 
@@ -404,5 +573,5 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/up.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/up.ts)_
+_See code: [src/commands/up.ts](https://github.com/lime-it/blip/blob/v1.0.0/src/commands/up.ts)_
 <!-- commandsstop -->
