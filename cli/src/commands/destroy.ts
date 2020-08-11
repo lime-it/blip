@@ -9,6 +9,7 @@ export default class Destroy extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
+    yes: flags.boolean({char:'y', required: false, default: false, description:'If set make yes the default answer to adavance prompts.' }),
   }
 
   static args = []
@@ -18,10 +19,9 @@ export default class Destroy extends Command {
 
     const workspace = await BlipConf.readWorkspace();
 
-    const yesNo: string = await cli.prompt('Are you sure you want to destroy the project environment (Yn)?')
-    this.log()
+    const destroy = flags.yes || (await cli.prompt('Are you sure you want to destroy the project environment (Yn)?')).toLowerCase().charAt(0) == 'y';
 
-    if (yesNo.toLowerCase().charAt(0) == 'y') {      
+    if (destroy) {      
       const tasks = new Listr([
         ...workspaceDestroy()
       ])

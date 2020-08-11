@@ -37,7 +37,7 @@ USAGE
 * [`blip env [MACHINE]`](#blip-env-machine)
 * [`blip git`](#blip-git)
 * [`blip help [COMMAND]`](#blip-help-command)
-* [`blip init PROJECTNAME`](#blip-init-projectname)
+* [`blip init [PROJECTNAME]`](#blip-init-projectname)
 * [`blip inspect [MACHINE]`](#blip-inspect-machine)
 * [`blip ls`](#blip-ls)
 * [`blip plugins`](#blip-plugins)
@@ -45,6 +45,9 @@ USAGE
 * [`blip plugins:link PLUGIN`](#blip-pluginslink-plugin)
 * [`blip plugins:uninstall PLUGIN...`](#blip-pluginsuninstall-plugin)
 * [`blip plugins:update`](#blip-pluginsupdate)
+* [`blip tpl [FILE]`](#blip-tpl-file)
+* [`blip tpl:ls`](#blip-tplls)
+* [`blip tpl:use [FILE]`](#blip-tpluse-file)
 * [`blip up`](#blip-up)
 
 ## `blip destroy`
@@ -164,18 +167,18 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 
-## `blip init PROJECTNAME`
+## `blip init [PROJECTNAME]`
 
 Initialize a blip workspace in the current directory.
 
 ```
 USAGE
-  $ blip init PROJECTNAME
+  $ blip init [PROJECTNAME]
 
 ARGUMENTS
-  PROJECTNAME  Name of the project to be created.
+  PROJECTNAME  Name of the project to be created. If missing it will be set to the name of the current directory.
 
 OPTIONS
   -h, --help                             show CLI help
@@ -183,8 +186,8 @@ OPTIONS
   --machine-disk-size=machine-disk-size  [default: 20480] Docker machine disk size MB
   --machine-driver=machine-driver        [default: virtualbox] Docker machine driver
 
-  --machine-name=machine-name            [default: blip_71f716da-1227-4914-b5c7-fef28c6e0ea0] Docker machine name for
-                                         the project
+  --machine-name=machine-name            [default: blip130dc855d43141c2a21783a08ac97b8d] Docker machine name for the
+                                         project
 
   --machine-ram-size=machine-ram-size    [default: 2048] Docker machine ram size MB
 
@@ -342,6 +345,52 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/update.ts)_
+
+## `blip tpl [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip tpl [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/tpl/index.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/tpl/index.ts)_
+
+## `blip tpl:ls`
+
+List the available workspace templates
+
+```
+USAGE
+  $ blip tpl:ls
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/tpl/ls.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/tpl/ls.ts)_
+
+## `blip tpl:use [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ blip tpl:use [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/tpl/use.ts](https://github.com/lime-it/blip/blob/v0.2.3/src/commands/tpl/use.ts)_
 
 ## `blip up`
 

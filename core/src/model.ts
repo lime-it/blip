@@ -4,10 +4,16 @@ export interface GlobalBlipConfiguration {
   defaultDriver:string|null;
 }
 
+export interface BlipWorkspaceTemplateConfiguration {
+  name: string;
+  configuration: {[key:string]:any};
+}
+
 export interface BlipWorkspace{
   version: string;
   defaultMachine: string;
   machines: {[key: string]: BlipWorkspaceMachine};
+  template?: BlipWorkspaceTemplateConfiguration
 }
 
 export interface BlipWorkspaceMachine{
