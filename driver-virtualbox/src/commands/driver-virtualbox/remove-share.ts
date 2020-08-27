@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command'
-import { machineNameFlag, shareNameFlag } from '@lime.it/blip-core'
+import { machineNameFlag, shareGuestPathFlag } from '@lime.it/blip-core'
 import execa = require('execa')
 import { VBoxManage } from '../../vbox-manage'
 
@@ -9,7 +9,7 @@ export default class VirtualboxRemoveShare extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
     'machine-name': machineNameFlag,
-    'share-name': shareNameFlag
+    'share-guest-path': shareGuestPathFlag
   }
 
   static args = []
@@ -17,6 +17,6 @@ export default class VirtualboxRemoveShare extends Command {
   async run() {
     const {args, flags} = this.parse(VirtualboxRemoveShare)
     
-    await VBoxManage.removeSharedFolder(flags['machine-name'], flags['share-name']);
+    await VBoxManage.removeSharedFolder(flags['machine-name'], flags['share-guest-path']);
   }
 }

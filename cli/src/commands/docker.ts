@@ -13,10 +13,6 @@ export default class Docker extends Command {
   async run() {
     const {argv, flags} = this.parse(Docker)
 
-    const prc = execa('docker', argv);
-    prc.stdout.pipe(process.stdout);
-    prc.stderr.pipe(process.stderr);
-
-    return (await prc).exitCode;
+    return execa('docker', argv, {stdio:'inherit'});
   }
 }

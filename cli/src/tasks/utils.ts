@@ -48,11 +48,31 @@ export function ensureMachineIsPresent(ctx:MachineListTaskContext, name:string){
     throw new Error('Machine not found');
 }
 
-export function ensureMachineIsPresentAndRunning(ctx:MachineListTaskContext, name:string){
+export async function waitIfMachineIsStarting(ctx:MachineListTaskContext, name:string, timeout:number = 10000):Promise<void>{
   const machine = ctx.machineList.find(p => p.name === name);
   if(!machine)
     throw new Error('Machine not found');
 
-  if (machine.state?.toLowerCase() !== 'running')
+  if(machine.state !== 'Starting')
+    return;
+
+  const timeStep = 2000;
+  let waitTime = 0;
+  do{
+    await new Promise((resolve,_)=>setTimeout(()=>resolve(), timeStep));
+    waitTime += timeStep;
+    ctx.machineList = await DockerMachine.ls();
+  }
+  while (machine.state === 'Starting' && waitTime < timeout)
+}
+
+export async function ensureMachineIsPresentAndRunning(ctx:MachineListTaskContext, name:string){
+  const machine = ctx.machineList.find(p => p.name === name);
+  if(!machine)
+    throw new Error('Machine not found');
+
+  await waitIfMachineIsStarting(ctx, name, 10000);
+
+  if (machine.state !== 'Running')
     throw new Error('Machine not running')
 }

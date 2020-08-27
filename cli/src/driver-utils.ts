@@ -88,14 +88,13 @@ export class DriverUtils{
     return jresult;
   }  
 
-  async addShare(driver:string, machineName:string, folderName: string, hostPath: string, guestPath: string):Promise<void>{
+  async addShare(driver:string, machineName:string, guestPath: string, hostPath: string):Promise<void>{
     const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `driver-${driver}:add-share`);
     if(!cmd)
       throw new Error("Command not found");
 
     try{
       const result = await cmd.load().run(['--machine-name', machineName,
-        '--share-name', folderName,
         '--share-host-path', hostPath,
         '--share-guest-path', guestPath
       ]);
@@ -105,14 +104,14 @@ export class DriverUtils{
     }
   }  
 
-  async removeShare(driver:string, machineName:string, folderName: string):Promise<void>{
+  async removeShare(driver:string, machineName:string, guestPath: string):Promise<void>{
     const cmd = this.drivers[driver]?.commands?.find(p=>p.id == `driver-${driver}:remove-share`);
     if(!cmd)
       throw new Error("Command not found");
 
     try{
       const result = await cmd.load().run(['--machine-name', machineName,
-        '--share-name', folderName
+        '--share-guest-path', guestPath
       ]);
     }
     catch(err){

@@ -13,10 +13,6 @@ export default class Git extends Command {
   async run() {
     const {argv, flags} = this.parse(Git)
 
-    const prc = execa('git', argv);
-    prc.stdout.pipe(process.stdout);
-    prc.stderr.pipe(process.stderr);
-
-    return (await prc).exitCode;
+    return execa('git', argv, {stdio:'inherit'});
   }
 }

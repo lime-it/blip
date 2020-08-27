@@ -6,8 +6,8 @@ export abstract class VBoxManageTool extends ToolingDependecy{
   abstract getConfiguration(vmName:string):Promise<BlipMachineConfiguration>
   abstract setConfiguration(vmName:string, configuration:Partial<BlipMachineConfiguration>):Promise<void>;
 
-  abstract addSharedFolder(vmName:string, folderName:string, hostPath: string, guestPath:string):Promise<void>;
-  abstract removeSharedFolder(vmName:string, folderName:string):Promise<void>;
+  abstract addSharedFolder(vmName:string, guestPath:string, hostPath: string):Promise<void>;
+  abstract removeSharedFolder(vmName:string, guestPath:string):Promise<void>;
 }
 
 class VBoxManageToolImpl extends VBoxManageTool {
@@ -53,7 +53,7 @@ class VBoxManageToolImpl extends VBoxManageTool {
           hostPath: props.find(p => p.startsWith('Host path:'))?.replace(/^Host path:\s*/, '')?.replace(/^'(.*)'.+$/, '$1') || '',
           guestPath: props.find(p => p.startsWith('mount-point:'))?.replace(/^mount-point:\s*/, '')?.replace(/^'(.*)'$/, '$1') || '',
         }
-      }).reduce((acc, p)=>{acc[p.name]={hostPath:p.hostPath, guestPath:p.guestPath}; return acc;}, {} as { [key:string]: BlipMachineShareFolderInfo });
+      }).reduce((acc, p)=>{acc[p.name]={hostPath:p.hostPath}; return acc;}, {} as { [key:string]: BlipMachineShareFolderInfo });
     }
 
     return {
@@ -103,20 +103,20 @@ class VBoxManageToolImpl extends VBoxManageTool {
     }
   }
 
-  async addSharedFolder(vmName: string, folderName: string, hostPath: string, guestPath: string): Promise<void> {
+  async addSharedFolder(vmName: string, guestPath: string, hostPath: string): Promise<void> {
     await this.ensurePresent();
 
     await execa('VBoxManage', [
       'sharedfolder', 'add', vmName,
-      '--name', folderName,
+      '--name', guestPath,
       '--hostpath', hostPath,
       '--automount',
       '--auto-mount-point', guestPath])
   }
-  async removeSharedFolder(vmName: string, folderName: string): Promise<void> {
+  async removeSharedFolder(vmName: string, guestPath: string): Promise<void> {
     await this.ensurePresent();
     
-    await execa('VBoxManage', ['sharedfolder', 'remove', vmName, '--name', folderName])
+    await execa('VBoxManage', ['sharedfolder', 'remove', vmName, '--name', guestPath])
   }
 }
 

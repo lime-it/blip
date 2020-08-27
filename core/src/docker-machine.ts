@@ -4,18 +4,32 @@ import { CLIError } from '@oclif/errors';
 
 export type DockerMachineListField='name'|'active'|'driver'|'state'|'url'|'swarm'|'docker'|'errors';
 
+export type DockerMachineState = 'Running'|'Paused'|'Saved'|'Stopped'|'Stopping'|'Starting'|'Error'|'Timeout';
+
 export interface DockerMachineListResult{
   name?: string;
   active?: string;
   activeHost?: string;
   activeSwarm?: string;
   driverName?: string;
-  state?: string;
+  state?: DockerMachineState;
   URL?: string;
   swarm?: string;
   error?: string;
   dockerVersion?: string;
   responseTime?: string;
+}
+
+export function isMachineStarty(state: DockerMachineState){
+  return state == 'Running' || state == 'Starting';
+}
+
+export function isMachineStoppy(state: DockerMachineState){
+  return state == 'Stopped' || state == 'Stopping' || state == 'Paused';
+}
+
+export function isMachineStuck(state: DockerMachineState){
+  return state == 'Error' || state == 'Timeout';
 }
 
 export interface DockerMachineEnv{
@@ -72,7 +86,7 @@ class DockerMachineToolImpl extends DockerMachineTool {
     return stdout.split('\n').filter(p => p.length > 0).map(row => {
       const item: DockerMachineListResult = {}
       row.split('|').forEach((value, i) => {
-        item[fields[i]] = value
+        item[fields[i]] = value as any
       })
       return item
     })

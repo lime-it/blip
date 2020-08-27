@@ -11,7 +11,7 @@ export function machineSetupLocalDns(name: string, domain: string): Listr.ListrT
     task: async (ctx:MachineListTaskContext&MachineEnvTaskContext) => {
       await fillMachineListTaskContext(ctx);
 
-      ensureMachineIsPresentAndRunning(ctx, name);
+      await ensureMachineIsPresentAndRunning(ctx, name);
 
       await fillMachineEnvTaskContext(ctx, name);
 

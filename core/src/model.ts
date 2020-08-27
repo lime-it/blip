@@ -25,7 +25,6 @@ export interface BlipWorkspaceMachine{
 
 export interface BlipMachineShareFolderInfo {
   hostPath: string;
-  guestPath: string;
 }
 
 export interface BlipMachineConfiguration {
@@ -33,7 +32,7 @@ export interface BlipMachineConfiguration {
   cpuCount: number;
   ramMB: number;
   diskMB: number;
-  sharedFolders: { [key:string]: BlipMachineShareFolderInfo }
+  sharedFolders: { [guestPath:string]: BlipMachineShareFolderInfo }
 }
 
 export abstract class ToolingDependecy{

@@ -65,16 +65,16 @@ export function workspaceEnforceConfig(): Listr.ListrTask[] {
         .map(item=>({
           name: item.name,
           driver: item.workspaceConfig.driver,
-          config:Object.keys(item.workspaceConfig.configuration.sharedFolders).map(name=>({name, ...item.workspaceConfig.configuration.sharedFolders[name]})),
-          state: Object.keys(item.currentState.sharedFolders).map(name=>({name, ...item.currentState.sharedFolders[name]}))
+          config:Object.keys(item.workspaceConfig.configuration.sharedFolders).map(guestPath=>({guestPath, ...item.workspaceConfig.configuration.sharedFolders[guestPath]})),
+          state: Object.keys(item.currentState.sharedFolders).map(guestPath=>({guestPath, ...item.currentState.sharedFolders[guestPath]}))
         }))
         .map(item=>({
           name: item.name,
           driver: item.driver,
           toBeAdded: item.config
-            .filter(x=>!item.state.find(p=>p.name==x.name && p.hostPath==x.hostPath && p.guestPath==x.guestPath)),
+            .filter(x=>!item.state.find(p=>p.hostPath==x.hostPath && p.guestPath==x.guestPath)),
           toBeRemoved: item.state
-            .filter(x=>!item.config.find(p=>p.name==x.name && p.hostPath==x.hostPath && p.guestPath==x.guestPath))
+            .filter(x=>!item.config.find(p=>p.hostPath==x.hostPath && p.guestPath==x.guestPath))
         }))
         .filter(p=>p.toBeAdded.length>0 && p.toBeRemoved.length>0);
 
@@ -85,12 +85,12 @@ export function workspaceEnforceConfig(): Listr.ListrTask[] {
             task: async (ctx:any) => { ctx.toBeRestarted=true; await DockerMachine.stop(item.name); }
           },
           ...item.toBeRemoved.map(t=>({
-            title: `Removing share ${t.name}: ${t.hostPath}=>${t.guestPath}`,
-            task: async ()=>drivers.removeShare(item.driver, item.name, t.name)
+            title: `Removing share: ${t.guestPath}<=${t.hostPath}`,
+            task: async ()=>drivers.removeShare(item.driver, item.name, t.guestPath)
           })),
           ...item.toBeAdded.map(t=>({
-            title: `Adding share ${t.name}: ${t.hostPath}=>${t.guestPath}`,
-            task: async ()=>drivers.addShare(item.driver, item.name, t.name, t.hostPath, t.guestPath)
+            title: `Adding share: ${t.guestPath}<=${t.hostPath}`,
+            task: async ()=>drivers.addShare(item.driver, item.name, t.guestPath, t.hostPath)
           })),
           {
             skip: (ctx:any) => !ctx.toBeRestarted,

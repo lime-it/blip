@@ -27,12 +27,6 @@ export const ramSizeMBFlag = flags.integer({
   description:'Ram size in MB that a machine will have.'
 })
 
-export const shareNameFlag = flags.string({
-  name: 'share-name',
-  required: true,
-  description:'Name of the shared folder.'
-});
-
 export const shareHostPathFlag = flags.string({
   name: 'share-host-path',
   required: true,

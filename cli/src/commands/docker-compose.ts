@@ -13,10 +13,6 @@ export default class DockerCompose extends Command {
   async run() {
     const {argv, flags} = this.parse(DockerCompose)
 
-    const prc = execa('docker-compose', argv);
-    prc.stdout.pipe(process.stdout);
-    prc.stderr.pipe(process.stderr);
-
-    return (await prc).exitCode;
+    return execa('docker-compose', argv, {stdio:'inherit'});
   }
 }

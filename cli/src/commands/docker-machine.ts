@@ -13,10 +13,6 @@ export default class DockerMachine extends Command {
   async run() {
     const {argv, flags} = this.parse(DockerMachine)
 
-    const prc = execa('docker-machine', argv);
-    prc.stdout.pipe(process.stdout);
-    prc.stderr.pipe(process.stderr);
-
-    return (await prc).exitCode;
+    return execa('docker-machine', argv, {stdio:'inherit'});
   }
 }

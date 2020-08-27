@@ -66,10 +66,7 @@ export default class Init extends Command {
           ramMB: flags['machine-ram-size'],
           diskMB: flags['machine-disk-size'],
           sharedFolders:{
-            workspace:{
-              hostPath: resolve(BlipConf.getWorkspaceRootPath()),
-              guestPath: '/home/docker/project'
-            }
+            '/home/docker/project': { hostPath: resolve(BlipConf.getWorkspaceRootPath()) }
           }
         }
       }
