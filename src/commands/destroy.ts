@@ -1,15 +1,15 @@
 import {Command, flags} from '@oclif/command'
-import { readProjectModel } from '../common/utils'
-import { DockerMachine } from '../common/docker-machine'
 import Listr = require('listr')
-import { EtcHosts } from '../common/etc-hosts'
 import cli from 'cli-ux'
+import { BlipConf } from '@lime.it/blip-core'
+import { workspaceDestroy } from '../tasks/workspace-destroy.task'
 
 export default class Destroy extends Command {
-  static description = 'describe the command here'
+  static description = 'Destroys a blip environment deleteing its machines.'
 
   static flags = {
-    help: flags.help({char: 'h'})
+    help: flags.help({char: 'h'}),
+    yes: flags.boolean({char:'y', required: false, default: false, description:'If set make yes the default answer to adavance prompts.' }),
   }
 
   static args = []
@@ -17,39 +17,16 @@ export default class Destroy extends Command {
   async run() {
     const {args, flags} = this.parse(Destroy)
 
-    const projectModel = await readProjectModel();
-    const machines = await DockerMachine.ls('name','state');
-    
-    const yesNo:string = await cli.prompt(`Are you sure you want to destroy the project environment (Yn)?`);
-    this.log();
+    const workspace = await BlipConf.readWorkspace();
 
-    if(yesNo.toLowerCase().charAt(0)=='y'){const tasks:Listr.ListrTask[]=[];
-      const domains:string[]=[];
-      for(let name of Object.keys(projectModel.machines)){
-  
-        projectModel.machines[name].domains.forEach(d=>domains.push(d));
-  
-        if(machines.find(p=>p.name==name))
-          tasks.push({
-            title:`Removing machine '${name}'`,
-            task:async (ctx,task)=>{
-              await DockerMachine.remove(name);
-            }
-          });
-      }
-  
-      if(domains.length>0)
-        tasks.push({
-          title:'Cleaning hosts',
-          task:async (ctx, task)=>{
-            const hosts = await EtcHosts.create();
-            domains.forEach(d=>hosts.removeDomain(d));
-            await hosts.flush();
-          }
-        })
-  
-      if(tasks.length>0)
-        await (new Listr(tasks)).run();
+    const destroy = flags.yes || (await cli.prompt('Are you sure you want to destroy the project environment (Yn)?')).toLowerCase().charAt(0) == 'y';
+
+    if (destroy) {      
+      const tasks = new Listr([
+        ...workspaceDestroy()
+      ])
+
+      await tasks.run({workspace: await BlipConf.readWorkspace(), config: this.config})
     }
   }
 }

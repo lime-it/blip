@@ -1,14 +1,13 @@
 import {Command, flags} from '@oclif/command'
-import { BlipConf, DockerMachine } from '@lime.it/blip-core'
 import { CLIError } from '@oclif/errors';
-import { machineNameArg } from '../arguments';
+import { machineNameArg } from '../arguments'
+import { BlipConf } from '@lime.it/blip-core'
 
-export default class Env extends Command {
-  static description = 'Prints the docker-machine env for the workspace given machine.'
+export default class Inspect extends Command {
+  static description = 'describe the command here'
 
   static flags = {
     help: flags.help({char: 'h'}),
-    shell: flags.string({default: 'bash', description: 'Command output destination shell type.'}),
   }
 
   static args = [
@@ -16,7 +15,7 @@ export default class Env extends Command {
   ]
 
   async run() {
-    const {args, flags} = this.parse(Env)
+    const {args} = this.parse(Inspect)
 
     const workspace = await BlipConf.readWorkspace();
 
@@ -26,9 +25,10 @@ export default class Env extends Command {
     if(!args.machine)
       args.machine = Object.keys(workspace.machines)[0];
 
-    if(!workspace.machines[args.machine])
+    const machine = workspace.machines[args.machine];
+    if(!machine)
       throw new CLIError(`Unknown machine '${args.machine}'`);
-
-    process.stdout.write(await DockerMachine.envStdout(args.machine, flags.shell));
+      
+    process.stdout.write(JSON.stringify(machine, null, 4));
   }
 }

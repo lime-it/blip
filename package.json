@@ -1,51 +1,56 @@
 {
   "name": "@lime.it/blip",
   "description": "Project facilitator for people with little time and little desire to work",
-  "version": "0.2.3",
-  "author": "gcanossa @gcanossa",
+  "version": "0.0.0-development",
+  "author": "gcanossa @lim-e.it",
   "bin": {
     "blip": "./bin/run"
   },
-  "bugs": "https://github.com/lime-it/blip/issues",
+  "bugs": {
+    "url": "https://github.com/lime-it/blip/issues"
+  },
   "dependencies": {
-    "@oclif/command": "^1.5.19",
-    "@oclif/config": "^1.15.1",
-    "@oclif/plugin-help": "^2.2.3",
-    "cli-ux": "^5.4.5",
-    "execa": "^4.0.0",
-    "inquirer": "^7.1.0",
+    "@lime.it/blip-core": "^1.1.2",
+    "@lime.it/blip-driver-virtualbox": "^1.0.0",
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.0",
+    "@oclif/plugin-plugins": "^1.9.0",
+    "cli-ux": "^5.5.0",
+    "execa": "^4.0.3",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.3.3",
     "listr": "^0.14.3",
     "selfsigned": "^1.10.7",
-    "simple-git": "^1.132.0",
-    "tslib": "^1.11.1",
-    "uninstall": "0.0.0",
-    "uuid": "^3.4.0",
-    "yaml": "^1.8.3"
+    "simple-git": "^2.20.1",
+    "tslib": "^1.13.0",
+    "uuid": "^8.3.0",
+    "yaml": "^1.10.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
-    "@oclif/test": "^1.2.5",
-    "@types/chai": "^4.2.11",
+    "@oclif/test": "^1.2.7",
+    "@types/chai": "^4.2.12",
     "@types/execa": "^2.0.0",
+    "@types/fs-extra": "^8.1.1",
     "@types/inquirer": "^6.5.0",
     "@types/listr": "^0.14.2",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^10.17.19",
-    "@types/uuid": "^3.4.8",
-    "@types/yaml": "^1.2.0",
+    "@types/node": "^10.17.29",
+    "@types/uuid": "^8.3.0",
+    "@types/yaml": "^1.9.7",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.1.0",
     "globby": "^10.0.2",
-    "install": "^0.13.0",
     "mocha": "^5.2.0",
-    "npm": "^6.14.4",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.2",
+    "semantic-release": "^17.1.1",
     "simple-git-types": "^1.53.10",
-    "ts-node": "^8.8.2",
-    "typescript": "^3.8.3"
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -55,11 +60,15 @@
     "/lib",
     "/assets",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/oclif.manifest.json",
+    "/README.md",
+    "LICENSE"
   ],
-  "homepage": "https://github.com/lime-it/blip",
+  "homepage": "https://github.com/lime-it/blip#readme",
   "keywords": [
-    "oclif"
+    "oclif",
+    "blip",
+    "devops"
   ],
   "license": "MIT",
   "main": "lib/index.js",
@@ -67,16 +76,27 @@
     "commands": "./lib/commands",
     "bin": "blip",
     "plugins": [
-      "@oclif/plugin-help"
-    ]
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins",
+      "@lime.it/blip-driver-virtualbox"
+    ],
+    "hooks": {
+      "init": "./lib/hooks/init/init",
+      "prerun": "./lib/hooks/prerun/prerun",
+      "postrun": "./lib/hooks/postrun/postrun"
+    }
   },
-  "repository": "lime-it/blip",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lime-it/blip.git"
+  },
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md",
+    "semantic-release": "semantic-release"
   },
   "types": "lib/index.d.ts"
 }
