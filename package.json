@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@lime.it/blip-core": "^1.1.2",
-    "@lime.it/blip-driver-virtualbox": "^1.0.0",
+    "@lime.it/blip-driver-virtualbox": "^1.0.1",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.0",
