@@ -14,7 +14,7 @@ export default class Init extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    "machine-name": flags.string({description: 'Docker machine name for the project', required:false, default: `blip${uuid().replace(/-/g, '')}`}),
+    "machine-name": flags.string({description: 'Docker machine name for the project', required:false, default: ''}),
     "machine-driver": flags.string({description: 'Docker machine driver', dependsOn: ['machine-name'], default: 'virtualbox' }),
     "machine-cpu-count": flags.integer({description: 'Docker machine cpu count', dependsOn: ['machine-name'], default: 1 }),
     "machine-ram-size": flags.integer({description: 'Docker machine ram size MB', dependsOn: ['machine-name'], default: 2048 }),
@@ -30,6 +30,9 @@ export default class Init extends Command {
   async run() {
     const {args, flags} = this.parse(Init)    
     
+    if(flags['machine-name']=='')
+      flags['machine-name'] = `blip${uuid().replace(/-/g, '')}`;
+      
     if(!args.projectName)
       args.projectName = process.cwd().split(sep).reverse()[0];
 

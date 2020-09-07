@@ -180,7 +180,7 @@ OPTIONS
   --machine-disk-size=machine-disk-size  [default: 20480] Docker machine disk size MB
   --machine-driver=machine-driver        [default: virtualbox] Docker machine driver
 
-  --machine-name=machine-name            [default: blip7a9cef4bb0a544659acee721d098d520] Docker machine name for the
+  --machine-name=machine-name            [default: blipfad7ef1a8d07463ab039d0426b6918e7] Docker machine name for the
                                          project
 
   --machine-ram-size=machine-ram-size    [default: 2048] Docker machine ram size MB
