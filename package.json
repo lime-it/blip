@@ -47,7 +47,7 @@
     "mocha": "^5.2.0",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.2",
-    "semantic-release": "^17.1.1",
+    "semantic-release": "^19.0.3",
     "simple-git-types": "^1.53.10",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
