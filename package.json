@@ -22,7 +22,7 @@
     "inquirer": "^7.3.3",
     "listr": "^0.14.3",
     "selfsigned": "^1.10.7",
-    "simple-git": "^2.20.1",
+    "simple-git": "^3.15.0",
     "tslib": "^1.13.0",
     "uuid": "^8.3.0",
     "yaml": "^1.10.0"
